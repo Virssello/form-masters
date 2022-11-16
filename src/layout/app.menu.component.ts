@@ -16,21 +16,21 @@ export class AppMenuComponent implements OnInit {
       {
         label: 'Home',
         items: [
-          { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+          { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/home'] }
         ]
       },
       {
         label: 'User',
         items: [
-          { label: 'Measurements', icon: 'pi pi-fw pi-eye', routerLink: ['/user/measurements'] },
-          { label: 'Workouts', icon: 'pi pi-fw pi-plus', routerLink: ['/user/workouts'] },
+          { label: 'Measurements', icon: 'pi pi-fw pi-eye', routerLink: ['/home/user/measurements'] },
+          { label: 'Workouts', icon: 'pi pi-fw pi-plus', routerLink: ['/home/user/workouts'] },
         ]
       },
       {
         label: 'Food',
         items: [
-          { label: 'Products', icon: 'pi pi-fw pi-prime', routerLink: ['/food/products'] },
-          { label: 'Recipes', icon: 'pi pi-fw pi-desktop', routerLink: ['/food/recipes'] },
+          { label: 'Products', icon: 'pi pi-fw pi-prime', routerLink: ['/home/food/products'] },
+          { label: 'Recipes', icon: 'pi pi-fw pi-desktop', routerLink: ['/home/food/recipes'] },
         ]
       },
       {

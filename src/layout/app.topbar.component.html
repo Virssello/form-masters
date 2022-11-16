@@ -1,5 +1,5 @@
 <div class="layout-topbar">
-    <a class="layout-topbar-logo" routerLink="">
+    <a class="layout-topbar-logo" routerLink="/home">
         <img src="assets/layout/images/{{layoutService.config.colorScheme === 'light' ? 'logo-dark' : 'logo-white'}}.svg" alt="logo">
         <span>FORM MASTERS</span>
     </a>
@@ -13,7 +13,7 @@
     </button>
 
     <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
-        <button class="p-link layout-topbar-button" [routerLink]="'/settings'">
+        <button class="p-link layout-topbar-button" [routerLink]="'/home/settings'">
             <i class="pi pi-cog"></i>
             <span>Settings</span>
         </button>
