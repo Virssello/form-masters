@@ -4,12 +4,12 @@
       <div class="w-full surface-card py-8 px-5 sm:px-8"
            style="border-radius:53px">
           <div class="text-center mb-5">
-            <img src="../../../../assets/layout/images/login/avatar.png"
+            <img src="../../../../assets/layout/images/logo/logo-form-masters.png"
                  alt="Image"
                  height="50"
                  class="mb-3">
             <div class="text-900 text-3xl font-medium mb-3">Welcome in Form Masters</div>
-            <span class="text-600 font-medium">Sign up to continue</span>
+            <div class="text-600 text-2xl font-medium mb-3">Sign up to continue</div>
           </div>
 
           <form [formGroup]="userRegisterForm">
@@ -36,12 +36,20 @@
                           inputStyleClass="w-full p-3 md:w-30rem">
               </p-password>
 
-              <div class="flex align-items-center justify-content-between mb-5 gap-5">
+              <div class="flex flex-column align-items-center justify-content-between mb-5 gap-5">
                 <button pButton
                         pRipple
                         label="Sign up"
+                        icon="pi pi-user-plus"
                         class="w-full p-3 text-xl"
                         (click)="onUserSignUpSubmit()">
+                </button>
+                <button pButton
+                        pRipple
+                        label="Go back to landing page"
+                        icon="pi pi-home"
+                        class="w-full p-3 text-xl"
+                        [routerLink]="['/']">
                 </button>
               </div>
             </div>

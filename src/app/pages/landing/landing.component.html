@@ -3,23 +3,29 @@
         <div class="flex flex-column pt-4 px-4 lg:px-8 overflow-hidden"
             style="background: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), radial-gradient(77.36% 256.97% at 77.36% 57.52%, #EEEFAF 0%, #C3E3FA 100%); clip-path: ellipse(150% 100% at 93% 13%);">
             <div class="mx-4 md:mx-8 mt-0 md:mt-4">
-              <div class="flex justify-content-end">
-              <a pRipple
-                 (click)="router.navigate(['/auth/login'])"
-                 class="flex m-0 md:ml-5 px-0 py-3 text-900 cursor-pointer white-space-nowrap">
-                <p class="text-2xl">
-                  <i class="pi pi-sign-in mr-2" style="font-size: 1rem"></i>
-                  Login
-                </p>
-              </a>
-              <a pRipple
-                 (click)="router.navigate(['/auth/sign-up'])"
-                 class="flex m-0 md:ml-5 px-0 py-3 text-900 cursor-pointer white-space-nowrap">
-                <p class="text-2xl">
-                  <i class="pi pi-user-plus mr-2" style="font-size: 1rem"></i>
-                  Sign up
-                </p>
-              </a>
+              <div class="flex justify-content-between">
+                <img src="../../../../assets/layout/images/logo/logo-form-masters.png"
+                     alt="Image"
+                     height="100"
+                     class="mb-3">
+                <div class="flex flex-row flex-wrap">
+                  <a pRipple
+                     (click)="router.navigate(['/auth/login'])"
+                     class="flex m-0 md:ml-5 px-0 py-3 text-900 cursor-pointer white-space-nowrap">
+                    <p class="text-2xl">
+                      <i class="pi pi-sign-in mr-2" style="font-size: 1rem"></i>
+                      Login
+                    </p>
+                  </a>
+                  <a pRipple
+                     (click)="router.navigate(['/auth/sign-up'])"
+                     class="flex m-0 md:ml-5 px-0 py-3 text-900 cursor-pointer white-space-nowrap">
+                    <p class="text-2xl">
+                      <i class="pi pi-user-plus mr-2" style="font-size: 1rem"></i>
+                      Sign up
+                    </p>
+                  </a>
+                </div>
               </div>
               <h1 class="text-6xl font-bold text-gray-900 line-height-2"><span class="font-light block">Welcome in Form masters</span>Do what others can't</h1>
               <button pButton pRipple type="button" label="Get Started" class="p-button-rounded text-xl border-none mt-3 bg-blue-500 font-normal line-height-3 px-3 text-white"></button>
