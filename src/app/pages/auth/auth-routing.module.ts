@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [RouterModule.forChild([
-    { path: 'register', loadChildren: () => import('./register/register.module').then(({ RegisterModule }: any) => RegisterModule) },
+    { path: 'sign-up', loadChildren: () => import('./signup/sign-up.module').then(({ SignUpModule }: any) => SignUpModule) },
     { path: 'login', loadChildren: () => import('./login/login.module').then(({ LoginModule }: any) => LoginModule) },
     { path: '**', redirectTo: '/notfound' }
   ])],

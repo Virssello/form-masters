@@ -1,4 +1,5 @@
 import { AppLayoutComponent } from '../layout/app.layout.component';
+import { ExitComponent } from './pages/exit/exit.component';
 import { LandingComponent } from './pages/landing/landing.component';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
@@ -39,6 +40,7 @@ import { RouterModule } from '@angular/router';
           loadChildren: () => import('./pages/auth/auth.module').then(({ AuthModule }: any) => AuthModule),
         },
         { path: 'notfound', component: NotfoundComponent },
+        { path: 'exit', component: ExitComponent },
         { path: '**', redirectTo: '/notfound' },
       ],
       {

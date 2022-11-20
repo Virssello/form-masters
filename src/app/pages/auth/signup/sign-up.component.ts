@@ -2,30 +2,31 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { LayoutService } from '../../../../layout/service/app.layout.service';
 import { Store } from '@ngrx/store';
-import { userLoginAction } from './store/commands/user-login.action';
+import { userSignUpAction } from './store/commands/user-sign-up.action';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['login.component.scss'],
+  templateUrl: './sign-up.component.html',
+  styleUrls:['./sign-up.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginComponent {
+export class SignUpComponent {
 
-  public userLoginForm = this.formBuilder.group(({
+  public userRegisterForm = this.formBuilder.group(({
     username: ['', Validators.required],
     password: ['', Validators.required]
   }));
 
   constructor(public layoutService: LayoutService,
               private store: Store,
-              private formBuilder: FormBuilder) {}
+              private formBuilder: FormBuilder) {
+  }
 
-  public onUserLoginSubmit(): void {
-    this.store.dispatch(userLoginAction({
+  public onUserSignUpSubmit(): void {
+    this.store.dispatch(userSignUpAction({
       user: {
-        username: this.userLoginForm.value.username!,
-        password: this.userLoginForm.value.password!
+        username: this.userRegisterForm.value.username!,
+        password: this.userRegisterForm.value.password!
       }
     }));
   }

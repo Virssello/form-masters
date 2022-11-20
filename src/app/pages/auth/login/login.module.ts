@@ -1,23 +1,18 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { LoginRoutingModule } from './login-routing.module';
+import { EffectsModule } from '@ngrx/effects';
 import { LoginComponent } from './login.component';
-import { ButtonModule } from 'primeng/button';
-import { CheckboxModule } from 'primeng/checkbox';
-import { FormsModule } from '@angular/forms';
-import { PasswordModule } from 'primeng/password';
-import { InputTextModule } from 'primeng/inputtext';
+import { LoginRoutingModule } from './login-routing.module';
+import { NgModule } from '@angular/core';
+import { SharedModule } from '../../../../shared/shared.module';
+import { UserLoginEffect } from './store/commands/user-login.effect';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        LoginRoutingModule,
-        ButtonModule,
-        CheckboxModule,
-        InputTextModule,
-        FormsModule,
-        PasswordModule
-    ],
-    declarations: [LoginComponent]
+  imports: [
+    SharedModule,
+    LoginRoutingModule,
+    EffectsModule.forFeature([
+      UserLoginEffect
+    ])
+  ],
+  declarations: [LoginComponent]
 })
 export class LoginModule { }
