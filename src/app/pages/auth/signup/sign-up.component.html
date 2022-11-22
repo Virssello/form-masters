@@ -13,7 +13,6 @@
           </div>
 
           <form [formGroup]="userRegisterForm">
-            <div>
               <label for="username"
                      class="block text-900 text-xl font-medium mb-2">Username
               </label>
@@ -36,6 +35,30 @@
                           inputStyleClass="w-full p-3 md:w-30rem">
               </p-password>
 
+              <label for="gender"
+                     class="block text-900 font-medium text-xl mb-2">Gender
+              </label>
+              <p-selectButton id="gender"
+                              [options]="genderOptions"
+                              [formControlName]="'gender'"
+                              optionLabel="label"
+                              optionValue="value"
+                              styleClass="w-full md:w-30rem mb-5 align-self-center flex align-items-center justify-content-center">
+              </p-selectButton>
+
+              <label for="age"
+                     class="block text-900 font-medium text-xl mb-2">Age
+              </label>
+              <p-inputNumber id="age"
+                             [formControlName]="'age'"
+                             [showButtons]="true"
+                             [min]="1"
+                             [max]="100"
+                             mode="decimal"
+                             inputId="minmax-buttons"
+                             styleClass="w-full md:w-30rem mb-5">
+              </p-inputNumber>
+
               <div class="flex flex-column align-items-center justify-content-between mb-5 gap-5">
                 <button pButton
                         pRipple
@@ -52,7 +75,6 @@
                         [routerLink]="['/']">
                 </button>
               </div>
-            </div>
           </form>
       </div>
     </div>

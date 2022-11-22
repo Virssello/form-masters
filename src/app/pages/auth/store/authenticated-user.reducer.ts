@@ -3,15 +3,17 @@ import { AuthenticatedUserState } from './authenticated-user-state';
 import { createReducer, on } from '@ngrx/store';
 import { fetchAuthenticatedUserSuccessAction } from './queries/fetch-authenticated-user.action';
 
-export const authenticatedUserInitalState: AuthenticatedUserState = {
+export const authenticatedUserInitialState: AuthenticatedUserState = {
   authenticatedUserResponse: {
     id: 0,
-    username: ''
+    username: '',
+    gender: '',
+    age: 0
   }
 };
 
 export const authenticatedUserReducer = createReducer(
-  authenticatedUserInitalState,
+  authenticatedUserInitialState,
   on(fetchAuthenticatedUserSuccessAction, (state: AuthenticatedUserState, { authenticatedUserResponse: authenticatedUserResponse }: { authenticatedUserResponse: AuthenticatedUserResponse }) => ({
     ...state,
     authenticatedUserResponse: authenticatedUserResponse
