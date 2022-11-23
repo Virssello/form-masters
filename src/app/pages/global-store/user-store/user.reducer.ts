@@ -1,7 +1,7 @@
 import { UserResponse } from './response/user.response';
 import { UserState } from './user-state';
 import { createReducer, on } from '@ngrx/store';
-import { fetchUserSuccessAction } from './queries/fetch-authenticated-user/fetch-user.action';
+import { fetchUserSuccessAction } from './queries/fetch-user/fetch-user.action';
 
 export const userInitialState: UserState = {
   userResponse: {

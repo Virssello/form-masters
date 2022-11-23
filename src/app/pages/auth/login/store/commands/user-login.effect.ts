@@ -1,18 +1,21 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { Subject, catchError, of, switchMap, take, takeUntil, tap } from 'rxjs';
 import { UserLoginRequest } from '../request/user-login.request';
 import { UserLoginResponse } from '../response/user-login.response';
-import { catchError, of, switchMap, tap } from 'rxjs';
 import { fetchAuthenticatedUserAction } from '../../../store/queries/fetch-authenticated-user/fetch-authenticated-user.action';
 import { map } from 'rxjs/operators';
+import { selectAuthenticatedUserCalories } from '../../../store/selectors/authenticated-user-calories.selector';
 import { userLoginAction, userLoginErrorAction, userLoginSuccessAction } from './user-login.action';
 
 @Injectable()
-export class UserLoginEffect {
+export class UserLoginEffect implements OnDestroy {
+  private destroy$ = new Subject<void>;
+
   constructor(private actions$: Actions,
               private httpClient: HttpClient,
               private store: Store,
@@ -29,10 +32,27 @@ export class UserLoginEffect {
             return userLoginSuccessAction({ token: token });
           }),
           tap(() => this.store.dispatch(fetchAuthenticatedUserAction())),
-          tap(() => this.router.navigate(['/home'])),
+          tap(() => {
+            this.store.select(selectAuthenticatedUserCalories).pipe(
+              //TODO Figure out different way to fetch last observable
+              take(2),
+              tap((calories: any) => {
+                if (Boolean(calories)) {
+                  return this.router.navigate(['/home']);
+                } else {
+                  return this.router.navigate(['/login-measurement']);
+                }
+              }),
+              takeUntil(this.destroy$)
+            ).subscribe();
+          }),
           tap(() => this.messageService.add({ severity: 'success', summary: user.username, detail: 'Login successful' })),
           catchError((error: Error) => of(userLoginErrorAction({ error })))
         );
     })
   ));
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+  }
 }

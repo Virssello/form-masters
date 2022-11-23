@@ -22,7 +22,7 @@ export class LoginMeasurementComponent {
     waist: [90, Validators.required]
   }));
 
-  private decode = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
+  private decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
 
   constructor(private formBuilder: FormBuilder,
               private store: Store,
@@ -32,7 +32,7 @@ export class LoginMeasurementComponent {
   public onLoginMeasurementFormSubmit(): void {
     this.store.dispatch(loginMeasurementAction({
       measurement: {
-        userId: this.decode.id,
+        userId: this.decodedToken.id,
         weight: this.loginMeasurementForm.value.weight!,
         neck: this.loginMeasurementForm.value.neck!,
         chest: this.loginMeasurementForm.value.chest!,
