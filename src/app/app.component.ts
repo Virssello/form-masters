@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {PrimeNGConfig} from "primeng/api";
+import { Component, OnInit } from '@angular/core';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -7,10 +7,10 @@ import {PrimeNGConfig} from "primeng/api";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'form-masters';
+  public title = 'login-measurement-masters';
   constructor(private primengConfig: PrimeNGConfig) { }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.primengConfig.ripple = true;
   }
 }

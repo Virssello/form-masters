@@ -1,0 +1,129 @@
+<div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+  <div class="flex flex-column align-items-center justify-content-center">
+    <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+      <div class="w-full surface-card py-5 px-3 sm:px-8"
+           style="border-radius:53px">
+        <div class="text-center mb-5">
+          <img src="../../../../assets/layout/images/logo/logo-form-masters.png"
+               alt="Image"
+               height="50"
+               class="mb-3">
+          <div class="text-900 text-2xl font-medium mb-3">Please fill form about yourself</div>
+          <div class="text-600 text-xl font-medium mb-3">These information are necessary</div>
+          <div class="text-600 text-xl font-medium mb-3">to prepare app specially for you 💪</div>
+        </div>
+
+        <form [formGroup]="loginMeasurementForm">
+            <label for="weight"
+                   class="block text-900 font-medium text-xl mb-2">Weight
+            </label>
+            <p-inputNumber id="weight"
+                           [formControlName]="'weight'"
+                           [showButtons]="true"
+                           [min]="1"
+                           [max]="200"
+                           mode="decimal"
+                           inputId="minmax-buttons"
+                           styleClass="w-full md:w-30rem mb-5">
+            </p-inputNumber>
+
+            <label for="neck"
+                   class="block text-900 font-medium text-xl mb-2">Neck
+            </label>
+            <p-inputNumber id="neck"
+                           [formControlName]="'neck'"
+                           [showButtons]="true"
+                           [min]="1"
+                           [max]="200"
+                           mode="decimal"
+                           inputId="minmax-buttons"
+                           styleClass="w-full md:w-30rem mb-5">
+            </p-inputNumber>
+
+            <label for="chest"
+                   class="block text-900 font-medium text-xl mb-2">Chest
+            </label>
+            <p-inputNumber id="chest"
+                           [formControlName]="'chest'"
+                           [showButtons]="true"
+                           [min]="1"
+                           [max]="200"
+                           mode="decimal"
+                           inputId="minmax-buttons"
+                           styleClass="w-full md:w-30rem mb-5">
+            </p-inputNumber>
+
+            <label for="stomach"
+                   class="block text-900 font-medium text-xl mb-2">Stomach
+            </label>
+            <p-inputNumber id="stomach"
+                           [formControlName]="'stomach'"
+                           [showButtons]="true"
+                           [min]="1"
+                           [max]="200"
+                           mode="decimal"
+                           inputId="minmax-buttons"
+                           styleClass="w-full md:w-30rem mb-5">
+            </p-inputNumber>
+
+            <label for="hips"
+                   class="block text-900 font-medium text-xl mb-2">Hips
+            </label>
+            <p-inputNumber id="hips"
+                           [formControlName]="'hips'"
+                           [showButtons]="true"
+                           [min]="1"
+                           [max]="200"
+                           mode="decimal"
+                           inputId="minmax-buttons"
+                           styleClass="w-full md:w-30rem mb-5">
+            </p-inputNumber>
+
+            <label for="calf"
+                   class="block text-900 font-medium text-xl mb-2">Calf
+            </label>
+            <p-inputNumber id="calf"
+                           [formControlName]="'calf'"
+                           [showButtons]="true"
+                           [min]="1"
+                           [max]="200"
+                           mode="decimal"
+                           inputId="minmax-buttons"
+                           styleClass="w-full md:w-30rem mb-5">
+            </p-inputNumber>
+
+            <label for="waist"
+                   class="block text-900 font-medium text-xl mb-2">Waist
+            </label>
+            <p-inputNumber id="waist"
+                           [formControlName]="'waist'"
+                           [showButtons]="true"
+                           [min]="1"
+                           [max]="200"
+                           mode="decimal"
+                           inputId="minmax-buttons"
+                           styleClass="w-full md:w-30rem mb-5">
+            </p-inputNumber>
+
+            <div class="flex flex-column align-items-center justify-content-between mb-5 gap-5">
+              <button pButton
+                      pRipple
+                      label="Save measurement"
+                      icon="pi pi-save"
+                      class="w-full p-3 text-xl"
+                      (click)="onLoginMeasurementFormSubmit()">
+              </button>
+              <button pButton
+                      pRipple
+                      label="Go back to landing page"
+                      icon="pi pi-home"
+                      class="w-full p-3 text-xl"
+                      [routerLink]="['/']">
+              </button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
