@@ -20,15 +20,11 @@ export class LoginMeasurementEffect {
   public loginMeasurement$ = createEffect(() => this.actions$.pipe(
     ofType(loginMeasurementAction),
     switchMap(({ measurement }: { measurement: LoginMeasurementRequest }) => {
-      return this.httpClient.post('api/measurements/create-measurement', {
-        userId: 1,
-        ...measurement
-      })
-        .pipe(
-          map(() => loginMeasurementSuccessAction()),
-          tap(() => this.messageService.add({ severity: 'success', detail: 'Measurement saved successful' })),
-          tap(() => this.router.navigate(['/home'])),
-          catchError((error: Error) => of(loginMeasurementErrorAction({ error })))
-        );})
+      return this.httpClient.post('api/measurements/create-measurement', { ...measurement }).pipe(
+        map(() => loginMeasurementSuccessAction()),
+        tap(() => this.messageService.add({ severity: 'success', detail: 'Measurement saved successful' })),
+        tap(() => this.router.navigate(['/home'])),
+        catchError((error: Error) => of(loginMeasurementErrorAction({ error })))
+      );})
   ));
 }

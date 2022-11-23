@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Store } from '@ngrx/store';
 import { loginMeasurementAction } from './store/commands/login-measurement.action';
 
@@ -21,13 +22,17 @@ export class LoginMeasurementComponent {
     waist: [90, Validators.required]
   }));
 
+  private decode = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
+
   constructor(private formBuilder: FormBuilder,
-              private store: Store) {
+              private store: Store,
+              private jwtHelperService: JwtHelperService) {
   }
 
   public onLoginMeasurementFormSubmit(): void {
     this.store.dispatch(loginMeasurementAction({
       measurement: {
+        userId: this.decode.id,
         weight: this.loginMeasurementForm.value.weight!,
         neck: this.loginMeasurementForm.value.neck!,
         chest: this.loginMeasurementForm.value.chest!,
