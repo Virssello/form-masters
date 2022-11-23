@@ -59,6 +59,28 @@
                              styleClass="w-full md:w-30rem mb-5">
               </p-inputNumber>
 
+            <label for="goal"
+                   class="block text-900 font-medium text-xl mb-2">What is your goal to achieve with weight?
+            </label>
+            <p-selectButton id="goal"
+                            [options]="goalOptions"
+                            [formControlName]="'goal'"
+                            optionLabel="label"
+                            optionValue="value"
+                            styleClass="w-full md:w-30rem mb-5 align-self-center flex align-items-center justify-content-center">
+            </p-selectButton>
+
+            <label for="goal"
+                   class="block text-900 font-medium text-xl mb-2">What is your lifestyle?
+            </label>
+            <p-selectButton id="lifestyle"
+                            [options]="lifestyleOptions"
+                            [formControlName]="'lifestyle'"
+                            optionLabel="label"
+                            optionValue="value"
+                            styleClass="w-full md:w-30rem mb-5 align-self-center flex align-items-center justify-content-center">
+            </p-selectButton>
+
               <div class="flex flex-column align-items-center justify-content-between mb-5 gap-5">
                 <button pButton
                         pRipple

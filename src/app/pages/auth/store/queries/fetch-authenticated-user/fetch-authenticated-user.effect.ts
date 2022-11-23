@@ -1,5 +1,5 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { AuthenticatedUserResponse } from '../response/authenticated-user.response';
+import { AuthenticatedUserResponse } from '../../response/authenticated-user.response';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, of, switchMap } from 'rxjs';

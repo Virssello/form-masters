@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { UserLoginRequest } from '../request/user-login.request';
 import { UserLoginResponse } from '../response/user-login.response';
 import { catchError, of, switchMap, tap } from 'rxjs';
-import { fetchAuthenticatedUserAction } from '../../../store/queries/fetch-authenticated-user.action';
+import { fetchAuthenticatedUserAction } from '../../../store/queries/fetch-authenticated-user/fetch-authenticated-user.action';
 import { map } from 'rxjs/operators';
 import { userLoginAction, userLoginErrorAction, userLoginSuccessAction } from './user-login.action';
 

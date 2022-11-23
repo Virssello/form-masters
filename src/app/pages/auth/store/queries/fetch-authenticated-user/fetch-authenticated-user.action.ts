@@ -1,4 +1,4 @@
-import { AuthenticatedUserResponse } from '../response/authenticated-user.response';
+import { AuthenticatedUserResponse } from '../../response/authenticated-user.response';
 import { createAction, props } from '@ngrx/store';
 
 export const fetchAuthenticatedUserAction = createAction(
