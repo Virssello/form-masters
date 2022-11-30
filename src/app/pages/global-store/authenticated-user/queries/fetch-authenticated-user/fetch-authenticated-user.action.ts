@@ -2,7 +2,8 @@ import { AuthenticatedUserResponse } from '../../response/authenticated-user.res
 import { createAction, props } from '@ngrx/store';
 
 export const fetchAuthenticatedUserAction = createAction(
-  '[AuthenticatedUser] Fetch AuthenticatedUser Action'
+  '[AuthenticatedUser] Fetch AuthenticatedUser Action',
+  props<{ id: number }>()
 );
 
 export const fetchAuthenticatedUserSuccessAction = createAction(

@@ -8,7 +8,10 @@ export const authenticatedUserInitialState: AuthenticatedUserState = {
     id: 0,
     username: '',
     gender: '',
-    age: 0
+    age: 0,
+    height: 0,
+    lifestyle: '',
+    goal: ''
   }
 };
 

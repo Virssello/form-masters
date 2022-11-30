@@ -26,7 +26,7 @@ export class SignUpComponent {
   ];
 
   public lifestyleOptions: any[] = [
-    { label: 'Sedentary', value: Lifestyle.SEDENTARY },
+    /*    { label: 'Sedentary', value: Lifestyle.SEDENTARY },*/
     { label: 'Lightly active', value: Lifestyle.LIGHTLY_ACTIVE },
     { label: 'Moderately active', value: Lifestyle.MODERATELY_ACTIVE },
     { label: 'Very active', value: Lifestyle.VERY_ACTIVE },
@@ -38,6 +38,7 @@ export class SignUpComponent {
     password: ['', Validators.required],
     gender: [this.genderOptions[0].value, Validators.required],
     age: [18, Validators.required],
+    height: [170, Validators.required],
     goal: [this.goalOptions[1].value, Validators.required],
     lifestyle: [this.lifestyleOptions[0].value, Validators.required]
   }));
@@ -54,6 +55,9 @@ export class SignUpComponent {
         password: this.userRegisterForm.value.password!,
         gender: this.userRegisterForm.value.gender!,
         age: this.userRegisterForm.value.age!,
+        height: this.userRegisterForm.value.height!,
+        goal: this.userRegisterForm.value.goal!,
+        lifestyle: this.userRegisterForm.value.lifestyle!,
         calories: null!
       }
     }));

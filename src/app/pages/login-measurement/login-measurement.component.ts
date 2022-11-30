@@ -1,8 +1,19 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Actions } from '@ngrx/effects';
+import { AuthenticatedUserResponse } from '../global-store/authenticated-user/response/authenticated-user.response';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Gender } from '../../../shared/enums/gender';
+import { Goal } from '../../../shared/enums/goal';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Lifestyle, LifestyleNumbers } from '../../../shared/enums/lifestyle';
+import { MeasurementResponse } from '../global-store/measurement-store/response/measurement.response';
 import { Store } from '@ngrx/store';
+import { Subject, takeUntil, tap } from 'rxjs';
+import { fetchMeasurementAction } from '../global-store/measurement-store/queries/fetch-measurement/fetch-measurement.action';
+import { fetchUserAction } from '../global-store/user-store/queries/fetch-user/fetch-user.action';
 import { loginMeasurementAction } from './store/commands/login-measurement.action';
+import { selectAuthenticatedUser } from '../global-store/authenticated-user/selectors/authenticated-user.selector';
+import { selectMeasurement } from '../global-store/measurement-store/selectors/measurement.selector';
 
 @Component({
   selector: 'app-login-measurement',
@@ -10,7 +21,7 @@ import { loginMeasurementAction } from './store/commands/login-measurement.actio
   styleUrls: ['./login-measurement.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginMeasurementComponent {
+export class LoginMeasurementComponent implements OnDestroy {
   public loginMeasurementForm = this.formBuilder.group(({
     weight: [60, Validators.required],
     neck: [40, Validators.required],
@@ -23,10 +34,41 @@ export class LoginMeasurementComponent {
   }));
 
   private decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
+  private authenticatedUser$ = this.store.select(selectAuthenticatedUser);
+  private measurement$ = this.store.select(selectMeasurement);
+  private authenticatedUser: AuthenticatedUserResponse = {
+    id: 0,
+    username: '',
+    age: 0,
+    height: 0,
+    goal: '',
+    lifestyle: '',
+    gender: ''
+  };
+  private measurement: MeasurementResponse = {
+    userId: 0,
+    createdAt: new Date(1111, 11, 11),
+    weight: 0,
+    id: 0,
+  };
+  private userCalories: number = 0;
+  private activityUserCalories: number = 0;
+  private goalUserCalories: number = 0;
+  private destroy$ = new Subject<void>;
 
   constructor(private formBuilder: FormBuilder,
               private store: Store,
+              private actions$: Actions,
               private jwtHelperService: JwtHelperService) {
+    this.authenticatedUser$.pipe(
+      tap((user: AuthenticatedUserResponse) => this.authenticatedUser = user),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
+    this.measurement$.pipe(
+      tap((measurement: MeasurementResponse) => this.measurement = measurement),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   public onLoginMeasurementFormSubmit(): void {
@@ -43,5 +85,55 @@ export class LoginMeasurementComponent {
         waist: this.loginMeasurementForm.value.waist!,
       }
     }));
+    this.store.dispatch(fetchUserAction({ id: this.decodedToken.id }));
+    //TODO ADD UPDATE USER MEASUREMENT ACTION
+    this.store.dispatch(fetchMeasurementAction({ id: this.decodedToken.id }));
+    //this.store.dispatch(updateUserAction({ id: this.decodedToken, calories: this.getGoalUserCalories(this.getUserCalories()) }));
   };
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+  }
+
+  private getUserCalories(): number {
+    if (this.authenticatedUser.gender === Gender.MALE) {
+      this.userCalories = (66 + (13.7 * this.measurement.weight) + (5 * this.authenticatedUser.height) - (6.8 * this.authenticatedUser.age));
+
+      if (this.authenticatedUser.lifestyle === Lifestyle.SEDENTARY) {
+        return this.activityUserCalories = this.userCalories * LifestyleNumbers.SEDENTARY;
+      } else if (this.authenticatedUser.lifestyle === Lifestyle.LIGHTLY_ACTIVE) {
+        return this.activityUserCalories = this.userCalories * LifestyleNumbers.LIGHTLY_ACTIVE;
+      } else if (this.authenticatedUser.lifestyle === Lifestyle.MODERATELY_ACTIVE) {
+        return this.activityUserCalories = this.userCalories * LifestyleNumbers.MODERATELY_ACTIVE;
+      } else if (this.authenticatedUser.lifestyle === Lifestyle.VERY_ACTIVE) {
+        return this.activityUserCalories = this.userCalories * LifestyleNumbers.VERY_ACTIVE;
+      } else {
+        return this.activityUserCalories = this.userCalories * LifestyleNumbers.EXTRA_ACTIVE;
+      }
+    } else {
+      this.userCalories = (665 + (9.6 * this.measurement.weight) + (1.8 * this.authenticatedUser.height) - (4.7 * this.authenticatedUser.age));
+
+      if (this.authenticatedUser.lifestyle === Lifestyle.SEDENTARY) {
+        return this.activityUserCalories = this.userCalories * LifestyleNumbers.SEDENTARY;
+      } else if (this.authenticatedUser.lifestyle === Lifestyle.LIGHTLY_ACTIVE) {
+        return this.activityUserCalories = this.userCalories * LifestyleNumbers.LIGHTLY_ACTIVE;
+      } else if (this.authenticatedUser.lifestyle === Lifestyle.MODERATELY_ACTIVE) {
+        return this.activityUserCalories = this.userCalories * LifestyleNumbers.MODERATELY_ACTIVE;
+      } else if (this.authenticatedUser.lifestyle === Lifestyle.VERY_ACTIVE) {
+        return this.activityUserCalories = this.userCalories * LifestyleNumbers.VERY_ACTIVE;
+      } else {
+        return this.activityUserCalories = this.userCalories * LifestyleNumbers.EXTRA_ACTIVE;
+      }
+    }
+  }
+
+  private getGoalUserCalories(userCalories: number): number {
+    if (this.authenticatedUser.goal === Goal.LOSE) {
+      return this.activityUserCalories - 300;
+    } else if (this.authenticatedUser.goal === Goal.KEEP) {
+      return this.activityUserCalories;
+    } else {
+      return this.activityUserCalories + 300;
+    }
+  }
 }

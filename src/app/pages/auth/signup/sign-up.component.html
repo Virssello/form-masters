@@ -59,6 +59,19 @@
                              styleClass="w-full md:w-30rem mb-5">
               </p-inputNumber>
 
+              <label for="height"
+                     class="block text-900 font-medium text-xl mb-2">Height
+              </label>
+              <p-inputNumber id="height"
+                             [formControlName]="'age'"
+                             [showButtons]="true"
+                             [min]="130"
+                             [max]="220"
+                             mode="decimal"
+                             inputId="minmax-buttons"
+                             styleClass="w-full md:w-30rem mb-5">
+              </p-inputNumber>
+
             <label for="goal"
                    class="block text-900 font-medium text-xl mb-2">What is your goal to achieve with weight?
             </label>

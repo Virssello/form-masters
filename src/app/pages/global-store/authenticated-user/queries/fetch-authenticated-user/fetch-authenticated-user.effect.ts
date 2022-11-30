@@ -13,8 +13,8 @@ export class FetchAuthenticatedUserEffect {
 
   public authenticatedUser$ = createEffect(() => this.actions$.pipe(
     ofType(fetchAuthenticatedUserAction),
-    switchMap(() => {
-      return this.httpClient.get<AuthenticatedUserResponse>('api/auth/')
+    switchMap(({ id }: { id: number }) => {
+      return this.httpClient.get<AuthenticatedUserResponse>(`api/users/${id}`)
         .pipe(
           map((authenticatedUserResponse: AuthenticatedUserResponse) => {
             return fetchAuthenticatedUserSuccessAction({ authenticatedUserResponse: authenticatedUserResponse });}),

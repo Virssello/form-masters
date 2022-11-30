@@ -1,15 +1,16 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subject, catchError, of, switchMap, take, takeUntil, tap } from 'rxjs';
 import { UserLoginRequest } from '../request/user-login.request';
 import { UserLoginResponse } from '../response/user-login.response';
-import { fetchAuthenticatedUserAction } from '../../../store/queries/fetch-authenticated-user/fetch-authenticated-user.action';
+import { fetchAuthenticatedUserAction } from '../../../../global-store/authenticated-user/queries/fetch-authenticated-user/fetch-authenticated-user.action';
 import { map } from 'rxjs/operators';
-import { selectAuthenticatedUserCalories } from '../../../store/selectors/authenticated-user-calories.selector';
+import { selectAuthenticatedUserCalories } from '../../../../global-store/authenticated-user/selectors/authenticated-user-calories.selector';
 import { userLoginAction, userLoginErrorAction, userLoginSuccessAction } from './user-login.action';
 
 @Injectable()
@@ -20,7 +21,8 @@ export class UserLoginEffect implements OnDestroy {
               private httpClient: HttpClient,
               private store: Store,
               private router: Router,
-              private messageService: MessageService) {}
+              private messageService: MessageService,
+              private jwtHelperService: JwtHelperService) {}
 
   public userLogin$ = createEffect(() => this.actions$.pipe(
     ofType(userLoginAction),
@@ -31,7 +33,11 @@ export class UserLoginEffect implements OnDestroy {
             localStorage.setItem('token', token.token);
             return userLoginSuccessAction({ token: token });
           }),
-          tap(() => this.store.dispatch(fetchAuthenticatedUserAction())),
+          tap(() => {
+            const decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
+
+            return this.store.dispatch(fetchAuthenticatedUserAction({ id: decodedToken.id }));
+          }),
           tap(() => {
             this.store.select(selectAuthenticatedUserCalories).pipe(
               //TODO Figure out different way to fetch last observable
