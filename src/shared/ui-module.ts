@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { DataViewModule } from 'primeng/dataview';
+import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
@@ -72,7 +73,8 @@ const PRIMENG_MODULES = [
   OverlayPanelModule,
   MenuModule,
   BreadcrumbModule,
-  ProgressBarModule
+  ProgressBarModule,
+  DialogModule
 ];
 
 const MODULES = [

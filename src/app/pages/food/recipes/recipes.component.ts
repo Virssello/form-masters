@@ -1,46 +1,55 @@
-import { Component, OnInit } from '@angular/core';
-import { Product } from '../../../../demo/api/product';
-import { SelectItem } from 'primeng/api';
+import { BehaviorSubject, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { RecipeListResponse } from './recipes-list-store/response/recipe-list.response';
 import { Store } from '@ngrx/store';
 import { fetchRecipeListAction } from './recipes-list-store/queries/fetch-recipe-list/fetch-recipe-list.action';
+import { selectRecipeList } from './recipes-list-store/selectors/recipe-list.selector';
 
 @Component({
-  templateUrl: './recipes.component.html'
+  selector: 'app-receipes',
+  templateUrl: './recipes.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RecipesComponent implements OnInit {
+export class RecipesComponent implements OnDestroy {
+  public recipes$: Observable<RecipeListResponse[]> = this.store.select(selectRecipeList);
+  public recipes: RecipeListResponse[] = [];
+  public modalRecipe: RecipeListResponse = {
+    id: 0,
+    name: '',
+    calories: 0,
+    photo: '',
+    type: '',
+    description: '',
+    ingredients: ''
+  };
+  public displayModal: boolean;
 
-  products: Product[] = [];
-
-  sortOptions: SelectItem[] = [];
-
-  sortOrder: number = 0;
-
-  sortField: string = '';
-
+  public recipeId$ = new BehaviorSubject<number>(0);
+  private destroy$ = new Subject<void>;
 
   constructor(private store: Store) {
+
+    //TODO Fetch data with details receipes info
+    this.displayModal = false;
     this.store.dispatch(fetchRecipeListAction());
+    this.recipeId$.pipe(
+      tap((id: number) => this.recipes[id-1]),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
+    this.recipes$.pipe(
+      tap((recipeList: RecipeListResponse[]) => this.recipes = recipeList),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
   }
 
-  public ngOnInit() {
-
-    this.sortOptions = [
-      { label: 'Price High to Low', value: '!price' },
-      { label: 'Price Low to High', value: 'price' }
-    ];
+  public showModalDialog(id: number): void {
+    this.recipeId$.next(id);
+    this.displayModal = true;
   }
 
-  onSortChange(event: any) {
-    const value = event.value;
-
-    if (value.indexOf('!') === 0) {
-      this.sortOrder = -1;
-      this.sortField = value.substring(1, value.length);
-    } else {
-      this.sortOrder = 1;
-      this.sortField = value;
-    }
+  public ngOnDestroy(): void {
+    this.destroy$.next();
   }
-
-
 }
