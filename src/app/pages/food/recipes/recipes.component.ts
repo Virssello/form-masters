@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Product } from '../../../../demo/api/product';
-import { ProductService } from '../../../../demo/service/product.service';
 import { SelectItem } from 'primeng/api';
+import { Store } from '@ngrx/store';
 
 @Component({
   templateUrl: './recipes.component.html'
@@ -16,16 +16,10 @@ export class RecipesComponent {
 
   sortField: string = '';
 
-  sourceCities: any[] = [];
 
-  targetCities: any[] = [];
-
-  orderCities: any[] = [];
-
-  constructor(private productService: ProductService) { }
+  constructor(private store: Store) { }
 
   ngOnInit() {
-    this.productService.getProducts().then(data => this.products = data);
 
     this.sortOptions = [
       { label: 'Price High to Low', value: '!price' },
@@ -45,8 +39,5 @@ export class RecipesComponent {
     }
   }
 
-  /*  onFilter(dv: DataView, event: Event) {
-    dv.filter((event.target as HTMLInputElement).value);
-  }*/
 
 }

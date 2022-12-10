@@ -11,7 +11,7 @@ export class FetchRecipeEffect {
   constructor(private actions$: Actions,
               private httpClient: HttpClient) {}
 
-  public authenticatedRecipe$ = createEffect(() => this.actions$.pipe(
+  public recipe$ = createEffect(() => this.actions$.pipe(
     ofType(fetchRecipeAction),
     switchMap(({ id }: { id: number }) => {
       return this.httpClient.get<RecipeResponse>(`api/recipes/${id}`)
