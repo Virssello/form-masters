@@ -4,6 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { EffectsModule } from '@ngrx/effects';
 import { ExitComponent } from './pages/exit/exit.component';
+import { FoodModule } from './pages/food/food.module';
 import { GlobalStoreModule } from './pages/global-store/global-store.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
@@ -29,6 +30,7 @@ import { environment } from '../environments/environment';
     BrowserModule,
     HttpClientModule,
     GlobalStoreModule,
+    FoodModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {

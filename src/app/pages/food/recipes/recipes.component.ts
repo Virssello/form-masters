@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Product } from '../../../../demo/api/product';
 import { SelectItem } from 'primeng/api';
 import { Store } from '@ngrx/store';
+import { fetchRecipeListAction } from './recipes-list-store/queries/fetch-recipe-list/fetch-recipe-list.action';
 
 @Component({
   templateUrl: './recipes.component.html'
 })
-export class RecipesComponent {
+export class RecipesComponent implements OnInit {
 
   products: Product[] = [];
 
@@ -17,9 +18,11 @@ export class RecipesComponent {
   sortField: string = '';
 
 
-  constructor(private store: Store) { }
+  constructor(private store: Store) {
+    this.store.dispatch(fetchRecipeListAction());
+  }
 
-  ngOnInit() {
+  public ngOnInit() {
 
     this.sortOptions = [
       { label: 'Price High to Low', value: '!price' },
