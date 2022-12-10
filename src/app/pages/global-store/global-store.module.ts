@@ -10,6 +10,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module';
 import { StoreModule } from '@ngrx/store';
 import { USER_STATE_FEATURE_KEY } from './user-store/user-state.selector';
+import { UpdateUserCaloriesEffect } from './user-store/commands/update-user-calories/update-user-calories.effect';
 import { authenticatedUserMeasurementReducer } from './authenticated-user-measurement/authenticated-user-measurement.reducer';
 import { authenticatedUserReducer } from './authenticated-user/authenticated-user.reducer';
 import { measurementReducer } from './measurement-store/measurement.reducer';
@@ -27,7 +28,8 @@ import { userReducer } from './user-store/user.reducer';
       FetchAuthenticatedUserEffect,
       FetchAuthenticatedUserMeasurementEffect,
       FetchUserEffect,
-      FetchMeasurementEffect
+      FetchMeasurementEffect,
+      UpdateUserCaloriesEffect
     ])
   ]
 })

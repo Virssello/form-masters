@@ -23,6 +23,7 @@ import { MessagesModule } from 'primeng/messages';
 import { NgModule } from '@angular/core';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { PasswordModule } from 'primeng/password';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SidebarModule } from 'primeng/sidebar';
@@ -70,7 +71,8 @@ const PRIMENG_MODULES = [
   ContextMenuModule,
   OverlayPanelModule,
   MenuModule,
-  BreadcrumbModule
+  BreadcrumbModule,
+  ProgressBarModule
 ];
 
 const MODULES = [

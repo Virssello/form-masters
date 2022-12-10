@@ -39,6 +39,10 @@ import { RouterModule } from '@angular/router';
           path: 'auth',
           loadChildren: () => import('./pages/auth/auth.module').then(({ AuthModule }: any) => AuthModule),
         },
+        {
+          path: 'login-measurement',
+          loadChildren: () => import('./pages/login-measurement/login-measurement.module').then(({ LoginMeasurementModule }: any) => LoginMeasurementModule),
+        },
         { path: 'notfound', component: NotfoundComponent },
         { path: 'exit', component: ExitComponent },
         { path: '**', redirectTo: '/notfound' },

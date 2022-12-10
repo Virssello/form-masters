@@ -14,6 +14,7 @@ import { fetchUserAction } from '../global-store/user-store/queries/fetch-user/f
 import { loginMeasurementAction } from './store/commands/login-measurement.action';
 import { selectAuthenticatedUser } from '../global-store/authenticated-user/selectors/authenticated-user.selector';
 import { selectMeasurement } from '../global-store/measurement-store/selectors/measurement.selector';
+import { updateUserCaloriesAction } from '../global-store/user-store/commands/update-user-calories/update-user-calories.action';
 
 @Component({
   selector: 'app-login-measurement',
@@ -86,9 +87,13 @@ export class LoginMeasurementComponent implements OnDestroy {
       }
     }));
     this.store.dispatch(fetchUserAction({ id: this.decodedToken.id }));
-    //TODO ADD UPDATE USER MEASUREMENT ACTION
     this.store.dispatch(fetchMeasurementAction({ id: this.decodedToken.id }));
-    //this.store.dispatch(updateUserAction({ id: this.decodedToken, calories: this.getGoalUserCalories(this.getUserCalories()) }));
+    //TODO Look for bug with calories calculations
+    this.store.dispatch(updateUserCaloriesAction({ updateUserCalories: {
+      id: this.decodedToken.id,
+      calories: this.getGoalUserCalories(this.getUserCalories())
+    }
+    }));
   };
 
   public ngOnDestroy(): void {
@@ -97,7 +102,7 @@ export class LoginMeasurementComponent implements OnDestroy {
 
   private getUserCalories(): number {
     if (this.authenticatedUser.gender === Gender.MALE) {
-      this.userCalories = (66 + (13.7 * this.measurement.weight) + (5 * this.authenticatedUser.height) - (6.8 * this.authenticatedUser.age));
+      this.userCalories = (66 + (13.7 * this.loginMeasurementForm.value.weight!) + (5 * this.authenticatedUser.height) - (6.8 * this.authenticatedUser.age));
 
       if (this.authenticatedUser.lifestyle === Lifestyle.SEDENTARY) {
         return this.activityUserCalories = this.userCalories * LifestyleNumbers.SEDENTARY;
@@ -111,7 +116,7 @@ export class LoginMeasurementComponent implements OnDestroy {
         return this.activityUserCalories = this.userCalories * LifestyleNumbers.EXTRA_ACTIVE;
       }
     } else {
-      this.userCalories = (665 + (9.6 * this.measurement.weight) + (1.8 * this.authenticatedUser.height) - (4.7 * this.authenticatedUser.age));
+      this.userCalories = (665 + (9.6 * this.loginMeasurementForm.value.weight!) + (1.8 * this.authenticatedUser.height) - (4.7 * this.authenticatedUser.age));
 
       if (this.authenticatedUser.lifestyle === Lifestyle.SEDENTARY) {
         return this.activityUserCalories = this.userCalories * LifestyleNumbers.SEDENTARY;

@@ -10,6 +10,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { ProductService } from '../../../demo/service/product.service';
 import { StyleClassModule } from 'primeng/styleclass';
 import { TableModule } from 'primeng/table';
+import { UiModule } from '../../../shared/ui-module';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { TableModule } from 'primeng/table';
     StyleClassModule,
     PanelMenuModule,
     ButtonModule,
-    DashboardsRoutingModule
+    DashboardsRoutingModule,
+    UiModule
   ],
   declarations: [DashboardComponent],
   providers: [ProductService]

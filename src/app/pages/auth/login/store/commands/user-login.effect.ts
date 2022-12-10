@@ -1,7 +1,7 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { AuthenticatedUserResponse } from '../../../../global-store/authenticated-user/response/authenticated-user.response';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -10,6 +10,7 @@ import { UserLoginRequest } from '../request/user-login.request';
 import { UserLoginResponse } from '../response/user-login.response';
 import { fetchAuthenticatedUserAction } from '../../../../global-store/authenticated-user/queries/fetch-authenticated-user/fetch-authenticated-user.action';
 import { map } from 'rxjs/operators';
+import { selectAuthenticatedUser } from '../../../../global-store/authenticated-user/selectors/authenticated-user.selector';
 import { selectAuthenticatedUserCalories } from '../../../../global-store/authenticated-user/selectors/authenticated-user-calories.selector';
 import { userLoginAction, userLoginErrorAction, userLoginSuccessAction } from './user-login.action';
 
@@ -21,8 +22,7 @@ export class UserLoginEffect implements OnDestroy {
               private httpClient: HttpClient,
               private store: Store,
               private router: Router,
-              private messageService: MessageService,
-              private jwtHelperService: JwtHelperService) {}
+              private messageService: MessageService) {}
 
   public userLogin$ = createEffect(() => this.actions$.pipe(
     ofType(userLoginAction),
@@ -34,9 +34,11 @@ export class UserLoginEffect implements OnDestroy {
             return userLoginSuccessAction({ token: token });
           }),
           tap(() => {
-            const decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
-
-            return this.store.dispatch(fetchAuthenticatedUserAction({ id: decodedToken.id }));
+            this.store.dispatch(fetchAuthenticatedUserAction());
+            return this.store.select(selectAuthenticatedUser).pipe(
+              tap((user: AuthenticatedUserResponse) => localStorage.setItem('userCalories', String(user.calories))),
+              takeUntil(this.destroy$)
+            ).subscribe();
           }),
           tap(() => {
             this.store.select(selectAuthenticatedUserCalories).pipe(

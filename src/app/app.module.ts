@@ -4,6 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { EffectsModule } from '@ngrx/effects';
 import { ExitComponent } from './pages/exit/exit.component';
+import { GlobalStoreModule } from './pages/global-store/global-store.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpRequestInterceptor } from '../shared/interceptors/http-request.interceptor';
@@ -27,6 +28,7 @@ import { environment } from '../environments/environment';
     SharedModule,
     BrowserModule,
     HttpClientModule,
+    GlobalStoreModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {
