@@ -1,35 +1,31 @@
-import { Component, OnInit } from '@angular/core';
-import { Product } from '../../../../demo/api/product';
-import { ProductService } from '../../../../demo/service/product.service';
-
-interface expandedRows {
-  [key: string]: boolean;
-}
+import { Actions } from '@ngrx/effects';
+import { Component } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { Observable, tap } from 'rxjs';
+import { ProductListResponse } from './store/product-list-store/response/product-list.response';
+import { Store } from '@ngrx/store';
+import { fetchProductListAction } from './store/product-list-store/queries/fetch-product-list/fetch-product-list.action';
+import { selectProductList } from './store/product-list-store/selectors/product-list.selector';
 
 @Component({
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
 
-export class ProductsComponent implements OnInit {
-  public sourceProducts: Product[] =[
-    { name: 'Amy Elsner' },
-    { name: 'Anna Fali' },
-    { name: 'Asiya Javayant' },
-    { name: 'Bernardo Dominic' },
-    { name: 'Elwin Sharvill' },
-    { name: 'Ioni Bowcher' },
-    { name: 'Ivan Magalhaes' },
-    { name: 'Onyama Limba' },
-    { name: 'Stephen Shaw' },
-    { name: 'XuXue Feng' }
-  ];
-  public targetProducts: Product[] = [];
+export class ProductsComponent {
 
-  constructor(private productService: ProductService) { }
+  public products$: Observable<ProductListResponse[]> = this.store.select(selectProductList);
+  public products: ProductListResponse[] = [];
+  public targetProducts: ProductListResponse[] = [];
 
-  public ngOnInit(): void {
-    this.productService.getProductsSmall().then((products: Product[]) => this.sourceProducts = products);
+  constructor(private store: Store,
+              private actions$: Actions,
+              private jwtHelperService: JwtHelperService) {
+    this.store.dispatch(fetchProductListAction());
+
+    this.products$.pipe(
+      tap((products: ProductListResponse[]) => this.products = products)
+    ).subscribe();
   }
 
 }

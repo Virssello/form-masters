@@ -1,44 +1,27 @@
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { CommonModule } from '@angular/common';
-import { CustomerService } from '../../../../demo/service/customer.service';
-import { DropdownModule } from 'primeng/dropdown';
-import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { MultiSelectModule } from 'primeng/multiselect';
+import { EffectsModule } from '@ngrx/effects';
+import { FetchProductEffect } from './store/product-store/queries/fetch-product/fetch-product.effect';
+import { FetchProductListEffect } from './store/product-list-store/queries/fetch-product-list/fetch-product-list.effect';
 import { NgModule } from '@angular/core';
-import { PickListModule } from 'primeng/picklist';
-import { ProductService } from '../../../../demo/service/product.service';
+import { PRODUCT_LIST_STATE_FEATURE_KEY } from './store/product-list-store/product-list-state.selector';
+import { PRODUCT_STATE_FEATURE_KEY } from './store/product-store/product-state.selector';
 import { ProductsComponent } from './products.component';
 import { ProductsRoutingModule } from './products-routing.module';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { RatingModule } from 'primeng/rating';
-import { RippleModule } from 'primeng/ripple';
-import { SliderModule } from 'primeng/slider';
-import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
-import { ToggleButtonModule } from 'primeng/togglebutton';
+import { SharedModule } from '../../../../shared/shared.module';
+import { StoreModule } from '@ngrx/store';
+import { productListReducer } from './store/product-list-store/product-list.reducer';
+import { productReducer } from './store/product-store/product.reducer';
 
 @NgModule({
   imports: [
-    CommonModule,
+    SharedModule,
     ProductsRoutingModule,
-    FormsModule,
-    TableModule,
-    RatingModule,
-    ButtonModule,
-    SliderModule,
-    InputTextModule,
-    ToggleButtonModule,
-    RippleModule,
-    MultiSelectModule,
-    DropdownModule,
-    ProgressBarModule,
-    ToastModule,
-    PickListModule,
-    CardModule
+    StoreModule.forFeature(PRODUCT_LIST_STATE_FEATURE_KEY, productListReducer),
+    StoreModule.forFeature(PRODUCT_STATE_FEATURE_KEY, productReducer),
+    EffectsModule.forFeature([
+      FetchProductListEffect,
+      FetchProductEffect
+    ])
   ],
-  declarations: [ProductsComponent],
-  providers: [CustomerService, ProductService]
+  declarations: [ProductsComponent]
 })
 export class ProductsModule { }

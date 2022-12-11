@@ -13,6 +13,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { MeasurementModule } from './pages/user/measurement/measurement.module';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
+import { ProductsModule } from './pages/food/products/products.module';
 import { SharedModule } from '../shared/shared.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
@@ -35,6 +36,7 @@ import { environment } from '../environments/environment';
     FoodModule,
     WorkoutModule,
     MeasurementModule,
+    ProductsModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {

@@ -27,6 +27,7 @@ import { MessagesModule } from 'primeng/messages';
 import { NgModule } from '@angular/core';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { PasswordModule } from 'primeng/password';
+import { PickListModule } from 'primeng/picklist';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -82,7 +83,8 @@ const PRIMENG_MODULES = [
   FieldsetModule,
   CarouselModule,
   ChipsModule,
-  ToolbarModule
+  ToolbarModule,
+  PickListModule
 ];
 
 const MODULES = [
