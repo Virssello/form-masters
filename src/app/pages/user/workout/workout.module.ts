@@ -1,25 +1,24 @@
-import { ButtonModule } from 'primeng/button';
-import { CarouselModule } from 'primeng/carousel';
-import { CommonModule } from '@angular/common';
-import { DataViewModule } from 'primeng/dataview';
-import { DropdownModule } from 'primeng/dropdown';
+import { CreateWorkoutEffect } from './workout-store/commands/create-workout/create-workout.effect';
+import { EffectsModule } from '@ngrx/effects';
+import { FetchWorkoutEffect } from './workout-store/queries/fetch-workout/fetch-workout.effect';
 import { NgModule } from '@angular/core';
-import { ProductService } from '../../../../demo/service/product.service';
-import { RatingModule } from 'primeng/rating';
+import { SharedModule } from '../../../../shared/shared.module';
+import { StoreModule } from '@ngrx/store';
+import { WORKOUT_STATE_FEATURE_KEY } from './workout-store/workout-state.selector';
 import { WorkoutComponent } from './workout.component';
 import { WorkoutRoutingModule } from './workout-routing.module';
+import { workoutReducer } from './workout-store/workout.reducer';
 
 @NgModule({
   imports: [
-    CommonModule,
+    SharedModule,
     WorkoutRoutingModule,
-    CarouselModule,
-    ButtonModule,
-    RatingModule,
-    DropdownModule,
-    DataViewModule
+    StoreModule.forFeature(WORKOUT_STATE_FEATURE_KEY, workoutReducer),
+    EffectsModule.forFeature([
+      FetchWorkoutEffect,
+      CreateWorkoutEffect
+    ])
   ],
-  declarations: [WorkoutComponent],
-  providers: [ProductService]
+  declarations: [WorkoutComponent]
 })
 export class WorkoutModule { }

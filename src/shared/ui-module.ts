@@ -4,6 +4,8 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
+import { CarouselModule } from 'primeng/carousel';
+import { ChipsModule } from 'primeng/chips';
 import { CommonModule } from '@angular/common';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ContextMenuModule } from 'primeng/contextmenu';
@@ -76,7 +78,9 @@ const PRIMENG_MODULES = [
   BreadcrumbModule,
   ProgressBarModule,
   DialogModule,
-  FieldsetModule
+  FieldsetModule,
+  CarouselModule,
+  ChipsModule
 ];
 
 const MODULES = [

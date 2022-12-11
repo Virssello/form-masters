@@ -23,7 +23,7 @@ import { updateUserCaloriesAction } from '../global-store/user-store/commands/up
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginMeasurementComponent implements OnDestroy {
-  public loginMeasurementForm = this.formBuilder.group(({
+  public loginMeasurementForm = this.formBuilder.group({
     weight: [60, Validators.required],
     neck: [40, Validators.required],
     chest: [90, Validators.required],
@@ -32,7 +32,7 @@ export class LoginMeasurementComponent implements OnDestroy {
     biceps: [40, Validators.required],
     calf: [40, Validators.required],
     waist: [90, Validators.required]
-  }));
+  });
 
   private decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
   private authenticatedUser$ = this.store.select(selectAuthenticatedUser);

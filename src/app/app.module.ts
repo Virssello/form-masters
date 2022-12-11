@@ -15,6 +15,7 @@ import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { SharedModule } from '../shared/shared.module';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
+import { WorkoutModule } from './pages/user/workout/workout.module';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -31,6 +32,7 @@ import { environment } from '../environments/environment';
     HttpClientModule,
     GlobalStoreModule,
     FoodModule,
+    WorkoutModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {
