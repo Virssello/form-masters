@@ -10,6 +10,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { HttpRequestInterceptor } from '../shared/interceptors/http-request.interceptor';
 import { JwtModule } from '@auth0/angular-jwt';
+import { MeasurementModule } from './pages/user/measurement/measurement.module';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { SharedModule } from '../shared/shared.module';
@@ -33,6 +34,7 @@ import { environment } from '../environments/environment';
     GlobalStoreModule,
     FoodModule,
     WorkoutModule,
+    MeasurementModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {

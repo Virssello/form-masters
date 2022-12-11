@@ -1,30 +1,27 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { AddMeasurementRequest } from './request/add-measurement.request';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoginMeasurementRequest } from './request/login-measurement.request';
 import { MessageService } from 'primeng/api';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { addMeasurementAction, addMeasurementErrorAction, addMeasurementSuccessAction } from './add-measurement.action';
 import { catchError, of, switchMap, tap } from 'rxjs';
-import { loginMeasurementAction, loginMeasurementErrorAction, loginMeasurementSuccessAction } from './login-measurement.action';
 import { map } from 'rxjs/operators';
 
 @Injectable()
-export class LoginMeasurementEffect {
+export class AddMeasurementEffect {
   constructor(private actions$: Actions,
               private httpClient: HttpClient,
               private store: Store,
-              private router: Router,
               private messageService: MessageService) {}
 
-  public loginMeasurement$ = createEffect(() => this.actions$.pipe(
-    ofType(loginMeasurementAction),
-    switchMap(({ measurement }: { measurement: LoginMeasurementRequest }) => {
+  public addMeasurement$ = createEffect(() => this.actions$.pipe(
+    ofType(addMeasurementAction),
+    switchMap(({ measurement }: { measurement: AddMeasurementRequest }) => {
       return this.httpClient.post('api/measurements/create-measurement', { ...measurement }).pipe(
-        map(() => loginMeasurementSuccessAction()),
+        map(() => addMeasurementSuccessAction()),
         tap(() => this.messageService.add({ severity: 'success', detail: 'Measurement saved successful' })),
-        tap(() => this.router.navigate(['/home'])),
-        catchError((error: Error) => of(loginMeasurementErrorAction({ error })))
+        catchError((error: Error) => of(addMeasurementErrorAction({ error })))
       );})
   ));
 }

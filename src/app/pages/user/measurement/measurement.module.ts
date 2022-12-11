@@ -1,43 +1,24 @@
-import { ButtonModule } from 'primeng/button';
-import { CommonModule } from '@angular/common';
-import { DialogModule } from 'primeng/dialog';
-import { DropdownModule } from 'primeng/dropdown';
-import { FileUploadModule } from 'primeng/fileupload';
-import { FormsModule } from '@angular/forms';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { AddMeasurementEffect } from './store/user-measurement-list-store/queries/commands/add-measurement.effect';
+import { EffectsModule } from '@ngrx/effects';
+import { FetchUserMeasurementListEffect } from './store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.effect';
 import { MeasurementComponent } from './measurement.component';
 import { MeasurementRoutingModule } from './measurement-routing.module';
 import { NgModule } from '@angular/core';
-import { ProductService } from '../../../../demo/service/product.service';
-import { RadioButtonModule } from 'primeng/radiobutton';
-import { RatingModule } from 'primeng/rating';
-import { RippleModule } from 'primeng/ripple';
-import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
-import { ToolbarModule } from 'primeng/toolbar';
+import { SharedModule } from '../../../../shared/shared.module';
+import { StoreModule } from '@ngrx/store';
+import { USER_MEASUREMENT_LIST_STATE_FEATURE_KEY } from './store/user-measurement-list-store/user-measurement-list-state.selector';
+import { userMeasurementListReducer } from './store/user-measurement-list-store/user-measurement-list.reducer';
 
 @NgModule({
   imports: [
-    CommonModule,
+    SharedModule,
     MeasurementRoutingModule,
-    TableModule,
-    FileUploadModule,
-    FormsModule,
-    ButtonModule,
-    RippleModule,
-    ToastModule,
-    ToolbarModule,
-    RatingModule,
-    InputTextModule,
-    InputTextareaModule,
-    DropdownModule,
-    RadioButtonModule,
-    InputNumberModule,
-    DialogModule
+    StoreModule.forFeature(USER_MEASUREMENT_LIST_STATE_FEATURE_KEY, userMeasurementListReducer),
+    EffectsModule.forFeature([
+      FetchUserMeasurementListEffect,
+      AddMeasurementEffect
+    ]),
   ],
-  declarations: [MeasurementComponent],
-  providers: [ProductService]
+  declarations: [MeasurementComponent]
 })
 export class MeasurementModule { }

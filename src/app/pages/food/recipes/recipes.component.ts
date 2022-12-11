@@ -19,14 +19,12 @@ export class RecipesComponent implements OnDestroy {
 
   public recipe$: Observable<RecipeResponse> = this.store.select(selectRecipe);
   public recipes: RecipeListResponse[] = [];
-  public displayModal: boolean;
+  public displayModal: boolean = false;
 
   public recipeId$ = new BehaviorSubject<number>(0);
   private destroy$ = new Subject<void>;
 
   constructor(private store: Store) {
-    this.displayModal = false;
-
     this.store.dispatch(fetchRecipeListAction());
 
     this.recipes$.pipe(
