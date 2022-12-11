@@ -1,14 +1,19 @@
 import { Actions, ofType } from '@ngrx/effects';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { BehaviorSubject, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Store } from '@ngrx/store';
+import { UserWorkoutListResponse } from './user-workout-list-store/response/user-workout-list.response';
 import { WorkoutListResponse } from '../../global-store/workout-list-store/response/workout-list.response';
 import { WorkoutResponse } from './workout-store/response/workout.response';
 import { createWorkoutAction, createWorkoutSuccessAction } from './workout-store/commands/create-workout/create-workout.action';
+import {
+  fetchUserWorkoutListAction
+} from './user-workout-list-store/queries/fetch-workout-list/fetch-user-workout-list.action';
 import { fetchWorkoutAction } from './workout-store/queries/fetch-workout/fetch-workout.action';
 import { fetchWorkoutListAction } from '../../global-store/workout-list-store/queries/fetch-workout-list/fetch-workout-list.action';
+import { selectUserWorkoutList } from './user-workout-list-store/selectors/user-workout-list.selector';
 import { selectWorkout } from './workout-store/selectors/workout.selector';
 import { selectWorkoutList } from '../../global-store/workout-list-store/selectors/workout-list.selector';
 
@@ -17,8 +22,9 @@ import { selectWorkoutList } from '../../global-store/workout-list-store/selecto
   styleUrls: ['./workout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WorkoutComponent {
+export class WorkoutComponent implements OnDestroy {
   public workouts$: Observable<WorkoutListResponse[]> = this.store.select(selectWorkoutList);
+  public userWorkouts$: Observable<UserWorkoutListResponse[]> = this.store.select(selectUserWorkoutList);
   public workout$: Observable<WorkoutResponse> = this.store.select(selectWorkout);
   public workoutId$ = new BehaviorSubject<number>(0);
   public workoutForm = this.formBuilder.group(({
@@ -28,6 +34,7 @@ export class WorkoutComponent {
   public responsiveOptions;
   public displayModal: boolean;
   public displayFormModal: boolean = false;
+  private destroy$ = new Subject<void>;
   private decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
 
   constructor(private store: Store,
@@ -38,8 +45,12 @@ export class WorkoutComponent {
 
     this.actions$.pipe(
       ofType(createWorkoutSuccessAction),
-      tap(() => this.displayFormModal = false)
+      tap(() => this.displayFormModal = false),
+      tap(() => this.store.dispatch(fetchUserWorkoutListAction({ id: this.decodedToken.id }))),
+      takeUntil(this.destroy$)
     ).subscribe();
+
+    this.store.dispatch(fetchUserWorkoutListAction({ id: this.decodedToken.id }));
 
     this.store.dispatch(fetchWorkoutListAction());
 
@@ -80,5 +91,9 @@ export class WorkoutComponent {
         exercises: this.workoutForm.value.exercises!
       }
     }));
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
   }
 }
