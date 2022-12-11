@@ -8,9 +8,7 @@ import { UserWorkoutListResponse } from './user-workout-list-store/response/user
 import { WorkoutListResponse } from '../../global-store/workout-list-store/response/workout-list.response';
 import { WorkoutResponse } from './workout-store/response/workout.response';
 import { createWorkoutAction, createWorkoutSuccessAction } from './workout-store/commands/create-workout/create-workout.action';
-import {
-  fetchUserWorkoutListAction
-} from './user-workout-list-store/queries/fetch-workout-list/fetch-user-workout-list.action';
+import { fetchUserWorkoutListAction } from './user-workout-list-store/queries/fetch-user-workout-list/fetch-user-workout-list.action';
 import { fetchWorkoutAction } from './workout-store/queries/fetch-workout/fetch-workout.action';
 import { fetchWorkoutListAction } from '../../global-store/workout-list-store/queries/fetch-workout-list/fetch-workout-list.action';
 import { selectUserWorkoutList } from './user-workout-list-store/selectors/user-workout-list.selector';

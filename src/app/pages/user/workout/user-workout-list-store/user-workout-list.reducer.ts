@@ -1,7 +1,7 @@
 import { UserWorkoutListResponse } from './response/user-workout-list.response';
 import { UserWorkoutListState } from './user-workout-list-state';
 import { createReducer, on } from '@ngrx/store';
-import { fetchUserWorkoutListSuccessAction } from './queries/fetch-workout-list/fetch-user-workout-list.action';
+import { fetchUserWorkoutListSuccessAction } from './queries/fetch-user-workout-list/fetch-user-workout-list.action';
 
 export const userWorkoutListInitialState: UserWorkoutListState = {
   userWorkoutListResponse: [{

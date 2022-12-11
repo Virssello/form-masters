@@ -1,6 +1,6 @@
 import { CreateWorkoutEffect } from './workout-store/commands/create-workout/create-workout.effect';
 import { EffectsModule } from '@ngrx/effects';
-import { FetchUserWorkoutListEffect } from './user-workout-list-store/queries/fetch-workout-list/fetch-user-workout-list.effect';
+import { FetchUserWorkoutListEffect } from './user-workout-list-store/queries/fetch-user-workout-list/fetch-user-workout-list.effect';
 import { FetchWorkoutEffect } from './workout-store/queries/fetch-workout/fetch-workout.effect';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../../../shared/shared.module';
