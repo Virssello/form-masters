@@ -4,6 +4,6 @@ export interface RecipeResponse {
   type: string,
   calories: number,
   photo: string,
-  ingredients: string,
+  ingredients: string[],
   description: string
 }

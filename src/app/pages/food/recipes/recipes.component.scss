@@ -1,0 +1,12 @@
+:host {
+  ::ng-deep .p-card {
+    margin-bottom: 10px;
+  }
+  ::ng-deep .p-fieldset {
+    margin-bottom: 20px;
+  }
+  ::ng-deep .p-card-content {
+    display: flex;
+    justify-content: center;
+  }
+}

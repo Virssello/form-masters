@@ -10,7 +10,7 @@ export const recipeInitialState: RecipeState = {
     type: '',
     calories: 0,
     photo: '',
-    ingredients: '',
+    ingredients: [''],
     description: ''
   }
 };

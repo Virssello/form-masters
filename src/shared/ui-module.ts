@@ -12,6 +12,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -74,7 +75,8 @@ const PRIMENG_MODULES = [
   MenuModule,
   BreadcrumbModule,
   ProgressBarModule,
-  DialogModule
+  DialogModule,
+  FieldsetModule
 ];
 
 const MODULES = [

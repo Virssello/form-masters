@@ -2,13 +2,21 @@
   <div *ngIf="recipes$ | async as recipes" class="col-12">
     <div class="card">
       <h5>Recipes</h5>
-      <p-dataView [value]="recipes" [paginator]="true" [rows]="9" filterBy="name" layout="grid">
+      <p-dataView #dv
+                  [value]="recipes"
+                  [paginator]="true"
+                  [rows]="9"
+                  layout="grid"
+                  filterBy="name">
         <ng-template pTemplate="header">
           <div class="flex flex-column md:flex-row md:justify-content-between gap-2">
             <span class="p-input-icon-left">
-                            <i class="pi pi-search"></i>
-                            <input type="search" pInputText placeholder="Search by Name" >
-                        </span>
+              <i class="pi pi-search"></i>
+              <input type="search"
+                     pInputText
+                     placeholder="Search by recipe name"
+                     (input)="dv.filter($any($event.target).value, 'contains')">
+            </span>
           </div>
         </ng-template>
 
@@ -22,10 +30,13 @@
                 </div>
               </div>
               <div class="flex flex-column align-items-center text-center gap-3">
-                <img class="w-6rem h-6rem border-round-2xl" src="{{recipe.photo}}">
-                <div class="text-2xl font-bold">{{recipe.name}}</div>
+                <img class="w-6rem h-6rem border-round-2xl"
+                     src="{{recipe.photo}}">
                 <button pButton
-                        icon="pi pi-info"
+                        class="text-xl text-700 p-button-text p-button-outlined"
+                        label="{{recipe.name}}"
+                        icon="pi pi-info-circle"
+                        iconPos="right"
                         (click)="showModalDialog(recipe.id)">
                 </button>
             </div>
@@ -33,8 +44,36 @@
           </div>
         </ng-template>
       </p-dataView>
-    </div>
-    <p-dialog header="Recipe description" [(visible)]="displayModal" [style]="{width: '50vw'}" [baseZIndex]="10000">
+
+    <p-dialog *ngIf="recipe$ | async as recipeDetails"
+              [(visible)]="displayModal"
+              [style]="{width: '40vw'}"
+              [baseZIndex]="10000"
+              header="{{recipeDetails.name}} details">
+      <p-card>
+        <img class="w-20rem h-20rem border-round-2xl align-self-center"
+             src="{{recipeDetails.photo}}">
+      </p-card>
+
+      <p-fieldset legend="Ingredients">
+        <p-table [value]="recipeDetails.ingredients">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Name</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-ingredient>
+            <tr>
+              <td>{{ingredient}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-fieldset>
+
+      <p-fieldset legend="Description">
+        {{recipeDetails.description}}
+      </p-fieldset>
     </p-dialog>
+    </div>
   </div>
 </div>
