@@ -1,3 +1,4 @@
+import { AddProductUserEffect } from './store/product-user-store/commands/add-product-user/add-product-user.effect';
 import { EffectsModule } from '@ngrx/effects';
 import { FetchProductEffect } from './store/product-store/queries/fetch-product/fetch-product.effect';
 import { FetchProductListEffect } from './store/product-list-store/queries/fetch-product-list/fetch-product-list.effect';
@@ -19,7 +20,8 @@ import { productReducer } from './store/product-store/product.reducer';
     StoreModule.forFeature(PRODUCT_STATE_FEATURE_KEY, productReducer),
     EffectsModule.forFeature([
       FetchProductListEffect,
-      FetchProductEffect
+      FetchProductEffect,
+      AddProductUserEffect
     ])
   ],
   declarations: [ProductsComponent]

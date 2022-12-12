@@ -22,6 +22,7 @@ export class AddMeasurementEffect {
         map(() => addMeasurementSuccessAction()),
         tap(() => this.messageService.add({ severity: 'success', detail: 'Measurement saved successful' })),
         catchError((error: Error) => of(addMeasurementErrorAction({ error })))
-      );})
+      );
+    })
   ));
 }
