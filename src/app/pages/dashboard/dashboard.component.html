@@ -52,26 +52,27 @@
         </div>
     </div>
     <div class="col-12">
-      <div class="card">
+      <div *ngIf="product$ | async"
+           class="card">
         <h5>Recent products you have eaten</h5>
-        <p-table [value]="['exampleValue']" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+        <p-table [value]="eatenProductsUser" [paginator]="true" [rows]="15" responsiveLayout="scroll">
           <ng-template pTemplate="header">
             <tr>
-              <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+              <th pSortableColumn="name">Name<p-sortIcon field="name"></p-sortIcon></th>
               <th pSortableColumn="calories">Calories<p-sortIcon field="calories"></p-sortIcon></th>
-              <th pSortableColumn="proteins">Protein<p-sortIcon field="proteins"></p-sortIcon></th>
-              <th pSortableColumn="carbohydrates">Carbohydrates<p-sortIcon field="carbohydrates"></p-sortIcon></th>
-              <th pSortableColumn="fat" >Fat<p-sortIcon field="fat"></p-sortIcon></th>
+              <th pSortableColumn="protein">Protein<p-sortIcon field="protein"></p-sortIcon></th>
+              <th pSortableColumn="carbohydrate">Carbohydrates<p-sortIcon field="carbohydrate"></p-sortIcon></th>
+              <th pSortableColumn="fat">Fat<p-sortIcon field="fat"></p-sortIcon></th>
               <th style="width: 30px;"></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-product>
             <tr>
-              <td>name</td>
-              <td>calories</td>
-              <td>protein</td>
-              <td>carbohydrates</td>
-              <td>fat</td>
+              <td>{{product.name}}</td>
+              <td>{{product.calories}}</td>
+              <td>{{product.protein}}</td>
+              <td>{{product.carbohydrate}}</td>
+              <td>{{product.fat}}</td>
               <td style="width: 30px;">
                 <button pButton pRipple type="button" icon="pi pi-trash" class="p-button p-component p-button-text p-button-icon-only"></button>
               </td>

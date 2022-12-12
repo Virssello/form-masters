@@ -1,31 +1,27 @@
-import { ButtonModule } from 'primeng/button';
-import { ChartModule } from 'primeng/chart';
-import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardsRoutingModule } from './dashboard-routing.module';
-import { FormsModule } from '@angular/forms';
-import { MenuModule } from 'primeng/menu';
+import { EATEN_PRODUCT_USER_STATE_FEATURE_KEY } from './store/eaten-product-user-store/eaten-product-user-state.selector';
+import { EffectsModule } from '@ngrx/effects';
+import { FetchEatenProductUserEffect } from './store/eaten-product-user-store/queries/fetch-eaten-product-user/fetch-eaten-product-user.effect';
+import { FetchProductUserListEffect } from './store/product-user-store/queries/fetch-product-user-list/fetch-product-user-list.effect';
 import { NgModule } from '@angular/core';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { ProductService } from '../../../demo/service/product.service';
-import { StyleClassModule } from 'primeng/styleclass';
-import { TableModule } from 'primeng/table';
-import { UiModule } from '../../../shared/ui-module';
+import { PRODUCT_USER_LIST_STATE_FEATURE_KEY } from './store/product-user-store/product-user-list-state.selector';
+import { SharedModule } from '../../../shared/shared.module';
+import { StoreModule } from '@ngrx/store';
+import { eatenProductUserReducer } from './store/eaten-product-user-store/eaten-product-user.reducer';
+import { productUserListReducer } from './store/product-user-store/product-user-list.reducer';
 
 @NgModule({
   imports: [
-    CommonModule,
-    FormsModule,
-    ChartModule,
-    MenuModule,
-    TableModule,
-    StyleClassModule,
-    PanelMenuModule,
-    ButtonModule,
+    SharedModule,
     DashboardsRoutingModule,
-    UiModule
+    StoreModule.forFeature(PRODUCT_USER_LIST_STATE_FEATURE_KEY, productUserListReducer),
+    StoreModule.forFeature(EATEN_PRODUCT_USER_STATE_FEATURE_KEY, eatenProductUserReducer),
+    EffectsModule.forFeature([
+      FetchProductUserListEffect,
+      FetchEatenProductUserEffect
+    ])
   ],
   declarations: [DashboardComponent],
-  providers: [ProductService]
 })
 export class DashboardModule { }
