@@ -14,10 +14,11 @@ export class FetchProductUserListEffect {
   public productUserListEffect$ = createEffect(() => this.actions$.pipe(
     ofType(fetchProductUserListAction),
     switchMap(({ id }: { id: number }) => {
-      return this.httpClient.get<ProductUserListResponse[]>(`api/product-users/${id}`)
+      return this.httpClient.get<ProductUserListResponse[]>(`api/product-users/details/${id}`)
         .pipe(
           map((productUserListResponse: ProductUserListResponse[]) => {
-            return fetchProductUserListSuccessAction({ productUserListResponse: productUserListResponse });}),
+            return fetchProductUserListSuccessAction({ productUserListResponse: productUserListResponse });
+          }),
           catchError((error: Error) => of(fetchProductUserListErrorAction({ error })))
         );
     })

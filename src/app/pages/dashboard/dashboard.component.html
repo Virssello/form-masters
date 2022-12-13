@@ -52,10 +52,10 @@
         </div>
     </div>
     <div class="col-12">
-      <div *ngIf="product$ | async"
+      <div *ngIf="productsUser$ | async as productUser"
            class="card">
         <h5>Recent products you have eaten</h5>
-        <p-table [value]="eatenProductsUser" [paginator]="true" [rows]="15" responsiveLayout="scroll">
+        <p-table [value]="productUser" [paginator]="true" [rows]="15" responsiveLayout="scroll">
           <ng-template pTemplate="header">
             <tr>
               <th pSortableColumn="name">Name<p-sortIcon field="name"></p-sortIcon></th>
@@ -68,11 +68,11 @@
           </ng-template>
           <ng-template pTemplate="body" let-product>
             <tr>
-              <td>{{product.name}}</td>
-              <td>{{product.calories}}</td>
-              <td>{{product.protein}}</td>
-              <td>{{product.carbohydrate}}</td>
-              <td>{{product.fat}}</td>
+              <td>{{product.product.name}}</td>
+              <td>{{product.product.calories}}</td>
+              <td>{{product.product.protein}}</td>
+              <td>{{product.product.carbohydrate}}</td>
+              <td>{{product.product.fat}}</td>
               <td style="width: 30px;">
                 <button pButton pRipple type="button" icon="pi pi-trash" class="p-button p-component p-button-text p-button-icon-only"></button>
               </td>
