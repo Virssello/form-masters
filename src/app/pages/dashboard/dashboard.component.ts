@@ -1,3 +1,4 @@
+import { Actions, ofType } from '@ngrx/effects';
 import { AuthenticatedUserResponse } from '../global-store/authenticated-user/response/authenticated-user.response';
 import { ChangeDetectionStrategy, Component, NgZone, OnDestroy } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -6,6 +7,7 @@ import { Observable, Subject, Subscription, distinctUntilChanged, take, takeLast
 import { ProductUserListResponse } from './store/product-user-store/response/product-user-list.response';
 import { Store } from '@ngrx/store';
 import { UserMeasurementListResponse } from '../user/measurement/store/user-measurement-list-store/response/user-measurement-list.response';
+import { deleteProductUserAction, deleteProductUserSuccessAction } from '../food/products/store/product-user-store/commands/delete-product-user/delete-product-user.action';
 import { fetchAuthenticatedUserAction } from '../global-store/authenticated-user/queries/fetch-authenticated-user/fetch-authenticated-user.action';
 import { fetchProductUserListAction } from './store/product-user-store/queries/fetch-product-user-list/fetch-product-user-list.action';
 import { fetchUserMeasurementListAction } from '../user/measurement/store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
@@ -53,8 +55,15 @@ export class DashboardComponent implements OnDestroy {
 
   constructor(public layoutService: LayoutService,
               private store: Store,
+              private actions$: Actions,
               private jwtHelperService: JwtHelperService,
               private ngZone: NgZone) {
+    this.actions$.pipe(
+      ofType(deleteProductUserSuccessAction),
+      tap(()=> this.store.dispatch(fetchProductUserListAction({ id: this.decodedToken.id }))),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
     this.store.dispatch(fetchAuthenticatedUserAction());
 
     this.store.dispatch(fetchProductUserListAction({ id: this.decodedToken.id }));
@@ -86,7 +95,6 @@ export class DashboardComponent implements OnDestroy {
       tap((userMeasurements: UserMeasurementListResponse[]) => this.ngZone.run(
         () => {
           userMeasurements.forEach((userMeasurement: UserMeasurementListResponse) => {
-
             this.chartWeightData.push(userMeasurement.weight);
             this.chartCreatedAtLabels.push(formatDate(userMeasurement.createdAt, this.format, this.locale)).toString();
           });
@@ -162,5 +170,9 @@ export class DashboardComponent implements OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  public deleteProductUser(id: number): void {
+    this.store.dispatch(deleteProductUserAction({ id: id }));
   }
 }

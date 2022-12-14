@@ -57,17 +57,38 @@
       <div *ngIf="productsUser$ | async"
            class="card">
         <h5>Recent products you have eaten</h5>
-        <p-table [value]="productsUser"
+        <p-table #dt
+                 [value]="productsUser"
                  [paginator]="true"
                  [rows]="15"
                  responsiveLayout="scroll">
+          <ng-template pTemplate="caption">
+
+            <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+              <span class="block mt-2 md:mt-0 p-input-icon-right">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text"
+                                   placeholder="Search by name"
+                                   class="w-full sm:w-auto"
+                                   (input)="dt.filter($any($event.target).value, 'product.name','contains')"/>
+                        </span>
+              <div class="my-2">
+                <button pButton
+                        label="New product"
+                        icon="pi pi-plus"
+                        class="p-button-success mr-2"
+                        [routerLink]="['/home/food/products']">
+                </button>
+              </div>
+            </div>
+          </ng-template>
           <ng-template pTemplate="header">
             <tr>
-              <th pSortableColumn="name">Name<p-sortIcon field="name"></p-sortIcon></th>
-              <th pSortableColumn="calories">Calories<p-sortIcon field="calories"></p-sortIcon></th>
-              <th pSortableColumn="protein">Protein<p-sortIcon field="protein"></p-sortIcon></th>
-              <th pSortableColumn="carbohydrate">Carbohydrates<p-sortIcon field="carbohydrate"></p-sortIcon></th>
-              <th pSortableColumn="fat">Fat<p-sortIcon field="fat"></p-sortIcon></th>
+              <th pSortableColumn="product.name">Name<p-sortIcon field="product.name"></p-sortIcon></th>
+              <th pSortableColumn="product.calories">Calories<p-sortIcon field="product.calories"></p-sortIcon></th>
+              <th pSortableColumn="product.protein">Protein<p-sortIcon field="product.protein"></p-sortIcon></th>
+              <th pSortableColumn="product.carbohydrate">Carbohydrates<p-sortIcon field="product.carbohydrate"></p-sortIcon></th>
+              <th pSortableColumn="product.fat">Fat<p-sortIcon field="product.fat"></p-sortIcon></th>
               <th pSortableColumn="weight">Weight<p-sortIcon field="weight"></p-sortIcon></th>
               <th style="width: 30px;"></th>
             </tr>
@@ -81,7 +102,12 @@
               <td>{{product.product.fat * product.weight | number:'.1-3'}}</td>
               <td>{{product.weight | number:'.1-3'}} kg</td>
               <td style="width: 30px;">
-                <button pButton pRipple type="button" icon="pi pi-trash" class="p-button p-component p-button-text p-button-icon-only"></button>
+                <button pButton
+                        type="button"
+                        icon="pi pi-trash"
+                        class="p-button p-component p-button-text p-button-icon-only p-button-danger"
+                        (click)="deleteProductUser(product.id)">
+                </button>
               </td>
             </tr>
           </ng-template>

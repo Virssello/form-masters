@@ -1,28 +1,33 @@
 <div class="grid">
   <div class="col-12">
-    <div *ngIf="products$ | async" class="card px-6 py-6">
-<p-pickList [source]="products"
-            [target]="targetProducts"
-            [dragdrop]="true"
-            [responsive]="true"
-            [sourceStyle]="{'height':'45rem'}"
-            [targetStyle]="{'height':'45rem'}"
-            targetHeader="Selected"
-            sourceHeader="Available">
-  <ng-template let-product pTemplate="item">
-    <div class="product-item">
-      <div class="product-list-detail">
-        <div pTooltip="Protein: {{product.protein}}
-                      Carbohydrates: {{product.carbohydrate}}
-                      Fat: {{product.fat}}"
-             tooltipPosition="bottom">
-        <h5 class="mb-2">{{product.name}}
-          <h6>Calories: {{product.calories}}</h6>
-        </h5>
-        </div>
-      </div>
-    </div>
-  </ng-template>
+    <div *ngIf="products$ | async"
+         class="card">
+      <h5>Manage products</h5>
+      <p-pickList [source]="products"
+                  [target]="targetProducts"
+                  [dragdrop]="true"
+                  [responsive]="true"
+                  [sourceStyle]="{'height':'43rem'}"
+                  [targetStyle]="{'height':'43rem'}"
+                  filterBy="name"
+                  targetHeader="Selected"
+                  sourceHeader="Available"
+                  sourceFilterPlaceholder="Search by name"
+                  targetFilterPlaceholder="Search by name">
+        <ng-template let-product pTemplate="item">
+          <div class="product-item">
+            <div class="product-list-detail">
+              <div pTooltip="Protein: {{product.protein}}
+                            Carbohydrates: {{product.carbohydrate}}
+                            Fat: {{product.fat}}"
+                   tooltipPosition="bottom">
+              <h5 class="mb-2">{{product.name}}
+                <h6>Calories: {{product.calories}}</h6>
+              </h5>
+              </div>
+            </div>
+          </div>
+        </ng-template>
 </p-pickList>
   <p-divider></p-divider>
       <div class="flex gap-3 justify-content-end">
