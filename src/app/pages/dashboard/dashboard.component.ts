@@ -5,8 +5,8 @@ import { LayoutService } from '../../../layout/service/app.layout.service';
 import { Observable, Subject, Subscription, take, takeLast, takeUntil } from 'rxjs';
 import { ProductUserListResponse } from './store/product-user-store/response/product-user-list.response';
 import { Store } from '@ngrx/store';
+import { fetchAuthenticatedUserAction } from '../global-store/authenticated-user/queries/fetch-authenticated-user/fetch-authenticated-user.action';
 import { fetchProductUserListAction } from './store/product-user-store/queries/fetch-product-user-list/fetch-product-user-list.action';
-import { fetchUserAction } from '../global-store/user-store/queries/fetch-user/fetch-user.action';
 import { map } from 'rxjs/operators';
 import { selectAuthenticatedUser } from '../global-store/authenticated-user/selectors/authenticated-user.selector';
 import { selectProductUserList } from './store/product-user-store/selectors/product-user-list.selector';
@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public chartData: any;
   public chartOptions: any;
   public authenticatedUser$: Observable<AuthenticatedUserResponse> = this.store.select(selectAuthenticatedUser);
+  public productsUser$: Observable<ProductUserListResponse[]> = this.store.select(selectProductUserList);
   public userCalories: number = parseInt(localStorage.getItem('userCalories')!);
   public userMacronutrients: Macronutrients = {
     calories: this.userCalories,
@@ -41,8 +42,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     fat: 0
   };
 
-  public productsUser$: Observable<ProductUserListResponse[]> = this.store.select(selectProductUserList);
-
   private decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
   private destroy$ = new Subject<void>;
   private subscription: Subscription;
@@ -50,7 +49,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(public layoutService: LayoutService,
               private store: Store,
               private jwtHelperService: JwtHelperService) {
-    this.store.dispatch(fetchUserAction({ id: this.decodedToken.id }));
+    this.store.dispatch(fetchAuthenticatedUserAction());
 
     this.store.dispatch(fetchProductUserListAction({ id: this.decodedToken.id }));
 
