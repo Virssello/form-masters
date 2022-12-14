@@ -32,12 +32,7 @@ export class DashboardComponent implements OnDestroy {
   public productsUser$: Observable<ProductUserListResponse[]> = this.store.select(selectProductUserList);
   public productsUser: ProductUserListResponse[] = [];
   public userCalories: number = parseInt(localStorage.getItem('userCalories')!);
-  public userMacronutrients: Macronutrients = {
-    calories: this.userCalories,
-    protein: this.userCalories * 0.45,
-    carbohydrates: this.userCalories * 0.35,
-    fat: this.userCalories * 0.20,
-  };
+
   public currentlyEatenMacronutrients: Macronutrients = {
     calories: 0,
     protein: 0,
@@ -73,10 +68,10 @@ export class DashboardComponent implements OnDestroy {
         productsUser.forEach((productUser: ProductUserListResponse) => {
           if (formatDate(productUser.createdAt, this.format, this.locale) === this.currentDate) {
             this.productsUser.push(productUser);
-            this.currentlyEatenMacronutrients.calories += productUser.product.calories;
-            this.currentlyEatenMacronutrients.protein += productUser.product.protein;
-            this.currentlyEatenMacronutrients.carbohydrates += productUser.product.carbohydrate;
-            this.currentlyEatenMacronutrients.fat += productUser.product.fat;
+            this.currentlyEatenMacronutrients.calories! += (productUser.product.calories * productUser.weight);
+            this.currentlyEatenMacronutrients.protein += (productUser.product.protein * productUser.weight);
+            this.currentlyEatenMacronutrients.carbohydrates += (productUser.product.carbohydrate * productUser.weight);
+            this.currentlyEatenMacronutrients.fat += (productUser.product.fat * productUser.weight);
           }
         });
       }),

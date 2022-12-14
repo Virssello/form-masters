@@ -4,10 +4,10 @@
         <div class="card mb-0 flex flex-column justify-content-center mb-3">
             <div class="block text-500 font-medium mb-3 align-self-center">Calories</div>
             <div class="text-900 font-medium text-xl align-self-center mb-3">
-              {{currentlyEatenMacronutrients.calories}} / {{userMacronutrients.calories}}
+              {{currentlyEatenMacronutrients.calories | number:'.1-2'}} / {{user.calories! | number:'.1-2'}}
             </div>
             <div class="align-self-center">
-              <p-progressBar [value]="(this.currentlyEatenMacronutrients.calories/this.userMacronutrients.calories)*100"
+              <p-progressBar [value]="(currentlyEatenMacronutrients.calories / user.calories!)*100"
                              [showValue]="false">
               </p-progressBar>
             </div>
@@ -18,10 +18,10 @@
       <div class="card mb-0 flex flex-column justify-content-center mb-3">
             <div class="text-500 font-medium mb-3 align-self-center">Protein</div>
             <div class="text-900 font-medium text-xl align-self-center mb-3">
-              {{currentlyEatenMacronutrients.protein}} / {{userMacronutrients.protein}}
+              {{currentlyEatenMacronutrients.protein | number:'.1-2'}} / {{(user.calories!/ 4) * 0.45 | number:'.1-2'}}
             </div>
             <div class="align-self-center">
-              <p-progressBar [value]="(this.currentlyEatenMacronutrients.protein/this.userMacronutrients.protein)*100"
+              <p-progressBar [value]="(currentlyEatenMacronutrients.protein / (user.calories!/ 4) * 0.45) * 100"
                              [showValue]="false">
               </p-progressBar>
             </div>
@@ -31,10 +31,10 @@
       <div class="card mb-0 flex flex-column justify-content-center mb-3">
             <div class="block text-500 font-medium mb-3 align-self-center">Carbohydrates</div>
             <div class="text-900 font-medium text-xl align-self-center mb-3">
-              {{currentlyEatenMacronutrients.carbohydrates}} / {{this.userMacronutrients.carbohydrates}}
+              {{currentlyEatenMacronutrients.carbohydrates | number:'.1-2'}} / {{(user.calories! / 4) * 0.35 | number:'.1-2'}}
             </div>
             <div class="align-self-center">
-              <p-progressBar [value]="(this.currentlyEatenMacronutrients.carbohydrates/this.userMacronutrients.carbohydrates)*100"
+              <p-progressBar [value]="(currentlyEatenMacronutrients.carbohydrates / (user.calories! / 4) * 0.35) * 100"
                              [showValue]="false">
               </p-progressBar>
             </div>
@@ -43,9 +43,11 @@
     <div class="col-12 lg:col-6 xl:col-3">
       <div class="card mb-0 flex flex-column justify-content-center mb-3">
             <div class="block text-500 font-medium mb-3 align-self-center">Fat</div>
-            <div class="text-900 font-medium text-xl align-self-center mb-3">{{currentlyEatenMacronutrients.fat}} / {{userMacronutrients.fat}}</div>
+            <div class="text-900 font-medium text-xl align-self-center mb-3">
+              {{currentlyEatenMacronutrients.fat | number:'.1-2'}} / {{(user.calories! / 9) * 0.20  | number:'.1-2'}}
+            </div>
             <div class="align-self-center">
-            <p-progressBar [value]="(this.currentlyEatenMacronutrients.fat/this.userMacronutrients.fat)*100"
+            <p-progressBar [value]="(currentlyEatenMacronutrients.fat / (user.calories! / 9) * 0.20) * 100"
                            [showValue]="false">
             </p-progressBar>
             </div>
@@ -55,7 +57,10 @@
       <div *ngIf="productsUser$ | async"
            class="card">
         <h5>Recent products you have eaten</h5>
-        <p-table [value]="productsUser" [paginator]="true" [rows]="15" responsiveLayout="scroll">
+        <p-table [value]="productsUser"
+                 [paginator]="true"
+                 [rows]="15"
+                 responsiveLayout="scroll">
           <ng-template pTemplate="header">
             <tr>
               <th pSortableColumn="name">Name<p-sortIcon field="name"></p-sortIcon></th>
@@ -63,16 +68,18 @@
               <th pSortableColumn="protein">Protein<p-sortIcon field="protein"></p-sortIcon></th>
               <th pSortableColumn="carbohydrate">Carbohydrates<p-sortIcon field="carbohydrate"></p-sortIcon></th>
               <th pSortableColumn="fat">Fat<p-sortIcon field="fat"></p-sortIcon></th>
+              <th pSortableColumn="weight">Weight<p-sortIcon field="weight"></p-sortIcon></th>
               <th style="width: 30px;"></th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-product>
             <tr>
               <td>{{product.product.name}}</td>
-              <td>{{product.product.calories}}</td>
-              <td>{{product.product.protein}}</td>
-              <td>{{product.product.carbohydrate}}</td>
-              <td>{{product.product.fat}}</td>
+              <td>{{product.product.calories * product.weight | number:'.1-3'}}</td>
+              <td>{{product.product.protein * product.weight | number:'.1-3'}}</td>
+              <td>{{product.product.carbohydrate * product.weight | number:'.1-3'}}</td>
+              <td>{{product.product.fat * product.weight | number:'.1-3'}}</td>
+              <td>{{product.weight | number:'.1-3'}} kg</td>
               <td style="width: 30px;">
                 <button pButton pRipple type="button" icon="pi pi-trash" class="p-button p-component p-button-text p-button-icon-only"></button>
               </td>

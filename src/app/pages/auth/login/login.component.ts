@@ -12,10 +12,10 @@ import { userLoginAction } from './store/commands/user-login.action';
 })
 export class LoginComponent {
 
-  public userLoginForm = this.formBuilder.group(({
+  public userLoginForm = this.formBuilder.group({
     username: ['', Validators.required],
     password: ['', Validators.required]
-  }));
+  });
 
   constructor(public layoutService: LayoutService,
               private store: Store,

@@ -4,9 +4,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable, Subject, filter, takeUntil, tap } from 'rxjs';
 import { ProductListResponse } from './store/product-list-store/response/product-list.response';
 import { Store } from '@ngrx/store';
-import {
-  addProductUserAction
-} from './store/product-user-store/commands/add-product-user/add-product-user.action';
+import { addProductUserAction } from './store/product-user-store/commands/add-product-user/add-product-user.action';
 import { clearProductListAction } from './store/product-list-store/commands/clear-product-list/clear-product-list.action';
 import { fetchProductListAction } from './store/product-list-store/queries/fetch-product-list/fetch-product-list.action';
 import { selectProductList } from './store/product-list-store/selectors/product-list.selector';
@@ -23,6 +21,7 @@ export class ProductsComponent implements OnDestroy {
   public initialProducts: ProductListResponse[] = [];
   public products: ProductListResponse[] = [];
   public targetProducts: ProductListResponse[] = [];
+  public weight: number = 0.001;
 
   private destroy$ = new Subject<void>;
   private decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
@@ -46,7 +45,8 @@ export class ProductsComponent implements OnDestroy {
         { addProductUser:
           {
             userId: this.decodedToken.id,
-            productId: product.id
+            productId: product.id,
+            weight: this.weight
           }
         }
       ));

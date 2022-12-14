@@ -5,5 +5,6 @@ export interface ProductUserListResponse {
   createdAt: Date,
   userId: number,
   productId: number,
-  product: EatenProductUserResponse
+  product: EatenProductUserResponse,
+  weight: number
 }

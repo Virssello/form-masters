@@ -9,6 +9,7 @@ export const productUserListInitialState: ProductUserListState = {
     createdAt: new Date(1111, 11, 11),
     userId: 0,
     productId: 0,
+    weight: 0,
     product: {
       name: '',
       id: 0,

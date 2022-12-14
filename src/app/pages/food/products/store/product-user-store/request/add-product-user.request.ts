@@ -1,4 +1,5 @@
 export interface AddProductUserRequest {
   userId: number,
-  productId: number
+  productId: number,
+  weight: number
 }
