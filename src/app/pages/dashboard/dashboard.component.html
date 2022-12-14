@@ -52,10 +52,10 @@
         </div>
     </div>
     <div class="col-12">
-      <div *ngIf="productsUser$ | async as productUser"
+      <div *ngIf="productsUser$ | async"
            class="card">
         <h5>Recent products you have eaten</h5>
-        <p-table [value]="productUser" [paginator]="true" [rows]="15" responsiveLayout="scroll">
+        <p-table [value]="productsUser" [paginator]="true" [rows]="15" responsiveLayout="scroll">
           <ng-template pTemplate="header">
             <tr>
               <th pSortableColumn="name">Name<p-sortIcon field="name"></p-sortIcon></th>
@@ -81,7 +81,8 @@
         </p-table>
       </div>
     <div class="col-12">
-      <div class="card">
+      <div *ngIf="userMeasurements$ | async"
+           class="card">
         <h5>Weight Overview</h5>
         <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
         </div>

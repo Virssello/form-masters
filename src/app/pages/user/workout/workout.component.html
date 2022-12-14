@@ -42,7 +42,7 @@
           <p-dataView #dv
                       [value]="userWorkouts"
                       [paginator]="true"
-                      [rows]="4"
+                      [rows]="3"
                       filterBy="name"
                       layout="list">
             <ng-template pTemplate="header">
@@ -139,6 +139,5 @@
               (click)="onFormModalDialogSubmit()">
       </button>
     </ng-template>
-
   </p-dialog>
 </div>

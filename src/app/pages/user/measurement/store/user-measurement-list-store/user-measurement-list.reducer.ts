@@ -4,19 +4,7 @@ import { createReducer, on } from '@ngrx/store';
 import { fetchUserMeasurementListSuccessAction } from './queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
 
 export const userMeasurementListInitialState: UserMeasurementListState = {
-  userMeasurementListResponse: [{
-    id: 0,
-    createdAt: new Date(1111, 11, 11),
-    userId: 0,
-    weight: 0,
-    neck: 0,
-    chest: 0,
-    stomach: 0,
-    hips: 0,
-    biceps: 0,
-    calf: 0,
-    waist: 0
-  }]
+  userMeasurementListResponse: null!
 };
 
 export const userMeasurementListReducer = createReducer(

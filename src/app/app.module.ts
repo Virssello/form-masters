@@ -2,6 +2,7 @@ import { AppComponent } from './app.component';
 import { AppLayoutModule } from '../layout/app.layout.module';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
+import { DashboardModule } from './pages/dashboard/dashboard.module';
 import { EffectsModule } from '@ngrx/effects';
 import { ExitComponent } from './pages/exit/exit.component';
 import { FoodModule } from './pages/food/food.module';
@@ -33,6 +34,7 @@ import { environment } from '../environments/environment';
     BrowserModule,
     HttpClientModule,
     GlobalStoreModule,
+    DashboardModule,
     FoodModule,
     WorkoutModule,
     MeasurementModule,

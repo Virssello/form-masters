@@ -17,9 +17,7 @@
                       Fat: {{product.fat}}"
              tooltipPosition="bottom">
         <h5 class="mb-2">{{product.name}}
-          <h6>Calories:
-            <p>{{product.calories}}</p>
-          </h6>
+          <h6>Calories: {{product.calories}}</h6>
         </h5>
         </div>
       </div>
@@ -30,7 +28,8 @@
         <button pButton
                 icon="pi pi-save"
                 label="Save products"
-                (click)="saveProducts()"></button>
+                (click)="saveProducts()">
+        </button>
       </div>
     </div>
   </div>

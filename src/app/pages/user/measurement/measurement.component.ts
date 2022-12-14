@@ -1,5 +1,5 @@
 import { Actions, ofType } from '@ngrx/effects';
-import { Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable, Subject, takeUntil, tap } from 'rxjs';
@@ -9,9 +9,9 @@ import { addMeasurementAction, addMeasurementSuccessAction } from './store/user-
 import { fetchUserMeasurementListAction } from './store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
 import { selectUserMeasurementList } from './store/user-measurement-list-store/selectors/user-measurement-list.selector';
 
-
 @Component({
-  templateUrl: './measurement.component.html'
+  templateUrl: './measurement.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MeasurementComponent implements OnDestroy {
   public measurements$: Observable<UserMeasurementListResponse[]> = this.store.select(selectUserMeasurementList);
