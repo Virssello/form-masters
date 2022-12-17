@@ -1,7 +1,6 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MessageService } from 'primeng/api';
 import { Store } from '@ngrx/store';
 import { UpdateUserCaloriesRequest } from '../../request/update-user-calories.request';
 import { catchError, of, switchMap } from 'rxjs';
@@ -12,8 +11,7 @@ import { updateUserCaloriesAction, updateUserCaloriesErrorAction, updateUserCalo
 export class UpdateUserCaloriesEffect {
   constructor(private store: Store,
               private httpClient: HttpClient,
-              private actions$: Actions,
-              private messageService: MessageService) {
+              private actions$: Actions) {
   }
 
   public updateUserCalories$ = createEffect(() => this.actions$.pipe(

@@ -6,5 +6,5 @@ export interface AuthenticatedUserResponse {
   height: number;
   goal: string;
   lifestyle: string;
-  calories?: number;
+  calories: number;
 }

@@ -1,17 +1,14 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { AuthenticatedUserResponse } from '../../../../global-store/authenticated-user/response/authenticated-user.response';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subject, catchError, of, switchMap, take, takeUntil, tap } from 'rxjs';
+import { Subject, catchError, of, switchMap, takeUntil, tap } from 'rxjs';
 import { UserLoginRequest } from '../request/user-login.request';
 import { UserLoginResponse } from '../response/user-login.response';
-import { fetchAuthenticatedUserAction } from '../../../../global-store/authenticated-user/queries/fetch-authenticated-user/fetch-authenticated-user.action';
 import { map } from 'rxjs/operators';
-import { selectAuthenticatedUser } from '../../../../global-store/authenticated-user/selectors/authenticated-user.selector';
-import { selectAuthenticatedUserCalories } from '../../../../global-store/authenticated-user/selectors/authenticated-user-calories.selector';
+import { selectAuthenticatedUserCalories } from '../../../../dashboard/store/authenticated-user-store/selectors/authenticated-user-calories.selector';
 import { userLoginAction, userLoginErrorAction, userLoginSuccessAction } from './user-login.action';
 
 @Injectable()
@@ -34,18 +31,9 @@ export class UserLoginEffect implements OnDestroy {
             return userLoginSuccessAction({ token: token });
           }),
           tap(() => {
-            this.store.dispatch(fetchAuthenticatedUserAction());
-            return this.store.select(selectAuthenticatedUser).pipe(
-              tap((user: AuthenticatedUserResponse) => localStorage.setItem('userCalories', String(user.calories))),
-              takeUntil(this.destroy$)
-            ).subscribe();
-          }),
-          tap(() => {
             this.store.select(selectAuthenticatedUserCalories).pipe(
-              //TODO Figure out different way to fetch last observable
-              take(2),
-              tap((calories: any) => {
-                if (Boolean(calories)) {
+              tap((calories: number) => {
+                if (Boolean(calories > 0)) {
                   return this.router.navigate(['/home']);
                 } else {
                   return this.router.navigate(['/login-measurement']);

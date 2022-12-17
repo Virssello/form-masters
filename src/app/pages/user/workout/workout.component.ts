@@ -1,6 +1,6 @@
 import { Actions, ofType } from '@ngrx/effects';
 import { BehaviorSubject, Observable, Subject, filter, takeUntil, tap } from 'rxjs';
-import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Store } from '@ngrx/store';
@@ -41,13 +41,15 @@ export class WorkoutComponent implements OnDestroy {
   constructor(private store: Store,
               private actions$: Actions,
               private formBuilder: FormBuilder,
-              private jwtHelperService: JwtHelperService) {
+              private jwtHelperService: JwtHelperService,
+              private changeDetectorRef: ChangeDetectorRef) {
     this.displayModal = false;
 
     this.actions$.pipe(
       ofType(createWorkoutSuccessAction),
       tap(() => this.displayFormModal = false),
       tap(() => this.store.dispatch(fetchUserWorkoutListAction({ id: this.decodedToken.id }))),
+      tap(() => this.changeDetectorRef.detectChanges()),
       takeUntil(this.destroy$)
     ).subscribe();
 
