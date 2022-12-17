@@ -1,5 +1,5 @@
 import { Actions, ofType } from '@ngrx/effects';
-import { BehaviorSubject, Observable, Subject, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, filter, takeUntil, tap } from 'rxjs';
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -7,10 +7,12 @@ import { Store } from '@ngrx/store';
 import { UserWorkoutListResponse } from './user-workout-list-store/response/user-workout-list.response';
 import { WorkoutListResponse } from '../../global-store/workout-list-store/response/workout-list.response';
 import { WorkoutResponse } from './workout-store/response/workout.response';
+import { archiveWorkoutAction, archiveWorkoutSuccessAction } from './workout-store/commands/archive-workout/archive-workout.action';
 import { createWorkoutAction, createWorkoutSuccessAction } from './workout-store/commands/create-workout/create-workout.action';
 import { fetchUserWorkoutListAction } from './user-workout-list-store/queries/fetch-user-workout-list/fetch-user-workout-list.action';
 import { fetchWorkoutAction } from './workout-store/queries/fetch-workout/fetch-workout.action';
 import { fetchWorkoutListAction } from '../../global-store/workout-list-store/queries/fetch-workout-list/fetch-workout-list.action';
+import { map } from 'rxjs/operators';
 import { selectUserWorkoutList } from './user-workout-list-store/selectors/user-workout-list.selector';
 import { selectWorkout } from './workout-store/selectors/workout.selector';
 import { selectWorkoutList } from '../../global-store/workout-list-store/selectors/workout-list.selector';
@@ -25,6 +27,7 @@ export class WorkoutComponent implements OnDestroy {
   public userWorkouts$: Observable<UserWorkoutListResponse[]> = this.store.select(selectUserWorkoutList);
   public workout$: Observable<WorkoutResponse> = this.store.select(selectWorkout);
   public workoutId$ = new BehaviorSubject<number>(0);
+  public userWorkouts: UserWorkoutListResponse[] = [];
   public workoutForm = this.formBuilder.group(({
     name: ['', Validators.required],
     exercises: [[], Validators.required]
@@ -48,9 +51,21 @@ export class WorkoutComponent implements OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe();
 
+    this.actions$.pipe(
+      ofType(archiveWorkoutSuccessAction),
+      tap(() => this.store.dispatch(fetchUserWorkoutListAction({ id: this.decodedToken.id }))),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
     this.store.dispatch(fetchUserWorkoutListAction({ id: this.decodedToken.id }));
 
     this.store.dispatch(fetchWorkoutListAction());
+
+    this.store.select(selectUserWorkoutList).pipe(
+      filter((userWorkouts: UserWorkoutListResponse[]) => Boolean(userWorkouts)),
+      map((userWorkouts: UserWorkoutListResponse[]) => this.userWorkouts = userWorkouts),
+      takeUntil(this.destroy$)
+    ).subscribe();
 
     this.responsiveOptions = [
       {
@@ -90,8 +105,17 @@ export class WorkoutComponent implements OnDestroy {
       }
     }));
   }
+  public archiveWorkout(id: number): void {
+    this.store.dispatch(archiveWorkoutAction({
+      archiveWorkout: {
+        id: id,
+        archivedOn: new Date()
+      }
+    }));
+  }
 
   public ngOnDestroy(): void {
     this.destroy$.next();
   }
+
 }

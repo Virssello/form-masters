@@ -1,9 +1,9 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { CreateWorkoutRequest } from '../../request/create-workout.request';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Store } from '@ngrx/store';
-import { WorkoutRequest } from './request/workout.request';
 import { catchError, of, switchMap, tap } from 'rxjs';
 import { createWorkoutAction, createWorkoutErrorAction, createWorkoutSuccessAction } from './create-workout.action';
 import { map } from 'rxjs/operators';
@@ -17,7 +17,7 @@ export class CreateWorkoutEffect {
 
   public createWorkout$ = createEffect(() => this.actions$.pipe(
     ofType(createWorkoutAction),
-    switchMap(({ workout }: { workout: WorkoutRequest }) => {
+    switchMap(({ workout }: { workout: CreateWorkoutRequest }) => {
       return this.httpClient.post('api/workouts/create-workout', workout)
         .pipe(
           map(() => createWorkoutSuccessAction()),

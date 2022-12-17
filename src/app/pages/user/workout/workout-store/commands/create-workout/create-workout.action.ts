@@ -1,9 +1,9 @@
-import { WorkoutRequest } from './request/workout.request';
+import { CreateWorkoutRequest } from '../../request/create-workout.request';
 import { createAction, props } from '@ngrx/store';
 
 export const createWorkoutAction = createAction(
   '[Workout] Create Workout Action',
-  props<{ workout: WorkoutRequest }>()
+  props<{ workout: CreateWorkoutRequest }>()
 );
 
 export const createWorkoutSuccessAction = createAction(

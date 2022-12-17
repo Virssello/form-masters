@@ -1,3 +1,4 @@
+import { ArchiveWorkoutEffect } from './workout-store/commands/archive-workout/archive-workout.effect';
 import { CreateWorkoutEffect } from './workout-store/commands/create-workout/create-workout.effect';
 import { EffectsModule } from '@ngrx/effects';
 import { FetchUserWorkoutListEffect } from './user-workout-list-store/queries/fetch-user-workout-list/fetch-user-workout-list.effect';
@@ -21,7 +22,8 @@ import { workoutReducer } from './workout-store/workout.reducer';
     EffectsModule.forFeature([
       FetchUserWorkoutListEffect,
       FetchWorkoutEffect,
-      CreateWorkoutEffect
+      CreateWorkoutEffect,
+      ArchiveWorkoutEffect
     ])
   ],
   declarations: [WorkoutComponent]

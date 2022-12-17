@@ -35,12 +35,12 @@
 
     </div>
   <div class="col-12">
-    <div *ngIf="userWorkouts$ | async as userWorkouts"
+    <div *ngIf="userWorkouts$ | async"
          class="col-12">
       <div class="card">
         <h5>Your workouts</h5>
           <p-dataView #dv
-                      [value]="userWorkouts"
+                      [value]="userWorkouts | filterArchivedOn"
                       [paginator]="true"
                       [rows]="3"
                       filterBy="name"
@@ -68,11 +68,16 @@
             <ng-template let-userWorkout pTemplate="listItem">
               <div class="col-12">
                 <div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-                  <div class="flex-1 flex flex-column align-items-center text-center md:text-left">
+                  <div class="flex-1 flex justify-content-between text-center md:text-left">
                     <button pButton
                             label="{{userWorkout.name}}"
                             class="font-bold text-xl p-button-raised p-button-secondary"
                             (click)="showModalDialog(userWorkout.id)">
+                    </button>
+                    <button pButton
+                            icon="pi pi-trash"
+                            class="p-button p-component p-button-text p-button-icon-only p-button-danger"
+                            (click)="archiveWorkout(userWorkout.id)">
                     </button>
                   </div>
                 </div>
