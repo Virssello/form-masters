@@ -1,10 +1,13 @@
-import { Actions } from '@ngrx/effects';
-import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
+import { Actions, ofType } from '@ngrx/effects';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable, Subject, filter, takeUntil, tap } from 'rxjs';
 import { ProductListResponse } from './store/product-list-store/response/product-list.response';
 import { Store } from '@ngrx/store';
-import { addProductUserAction } from './store/product-user-store/commands/add-product-user/add-product-user.action';
+import {
+  addProductUserAction,
+  addProductUserSuccessAction
+} from './store/product-user-store/commands/add-product-user/add-product-user.action';
 import { clearProductListAction } from './store/product-list-store/commands/clear-product-list/clear-product-list.action';
 import { fetchProductListAction } from './store/product-list-store/queries/fetch-product-list/fetch-product-list.action';
 import { selectProductList } from './store/product-list-store/selectors/product-list.selector';
@@ -27,14 +30,25 @@ export class ProductsComponent implements OnDestroy {
   private decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
   constructor(private store: Store,
               private actions$: Actions,
-              private jwtHelperService: JwtHelperService) {
+              private jwtHelperService: JwtHelperService,
+              private changeDetectorRef: ChangeDetectorRef) {
+    this.actions$.pipe(
+      ofType(addProductUserSuccessAction),
+      tap(() => {
+        this.products = [];
+        this.initialProducts = [];
+        this.targetProducts = [];
+      }),
+      tap(() => this.store.dispatch(fetchProductListAction())),
+      takeUntil(this.destroy$)
+    ).subscribe();
 
     this.store.dispatch(fetchProductListAction());
 
     this.products$.pipe(
-      filter((product: any) => Boolean(product)),
-      tap((products: ProductListResponse[]) => products.map((product: ProductListResponse) => this.initialProducts.push(product))),
-      tap((products: ProductListResponse[]) => products.map((product: ProductListResponse) => this.products.push(product))),
+      filter((product: ProductListResponse[]) => Boolean(product)),
+      tap((products: ProductListResponse[]) => products.forEach((product: ProductListResponse) => this.products.push(product))),
+      tap(() => this.changeDetectorRef.detectChanges()),
       takeUntil(this.destroy$)
     ).subscribe();
   }
@@ -51,9 +65,6 @@ export class ProductsComponent implements OnDestroy {
         }
       ));
     });
-    //FIGURE OUT BETTER WAY
-    this.products = this.initialProducts;
-    this.targetProducts = [];
   }
 
   public ngOnDestroy(): void {
