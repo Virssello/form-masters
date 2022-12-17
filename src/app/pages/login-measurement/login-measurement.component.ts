@@ -1,20 +1,20 @@
 import { Actions } from '@ngrx/effects';
-import { AuthenticatedUserResponse } from '../global-store/authenticated-user/response/authenticated-user.response';
+import { AuthenticatedUserResponse } from '../dashboard/store/authenticated-user-store/response/authenticated-user.response';
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Gender } from '../../../shared/enums/gender';
 import { Goal } from '../../../shared/enums/goal';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Lifestyle, LifestyleNumbers } from '../../../shared/enums/lifestyle';
-import { MeasurementResponse } from '../global-store/measurement-store/response/measurement.response';
+import { MeasurementResponse } from './store/measurement-store/response/measurement.response';
 import { Store } from '@ngrx/store';
 import { Subject, takeUntil, tap } from 'rxjs';
-import { fetchMeasurementAction } from '../global-store/measurement-store/queries/fetch-measurement/fetch-measurement.action';
-import { fetchUserAction } from '../global-store/user-store/queries/fetch-user/fetch-user.action';
-import { loginMeasurementAction } from './store/commands/login-measurement.action';
-import { selectAuthenticatedUser } from '../global-store/authenticated-user/selectors/authenticated-user.selector';
-import { selectMeasurement } from '../global-store/measurement-store/selectors/measurement.selector';
-import { updateUserCaloriesAction } from '../global-store/user-store/commands/update-user-calories/update-user-calories.action';
+import { fetchMeasurementAction } from './store/measurement-store/fetch-measurement/queries/fetch-measurement.action';
+import { fetchUserAction } from './store/user-store/queries/fetch-user/fetch-user.action';
+import { loginMeasurementAction } from './store/login-measurement/commands/login-measurement.action';
+import { selectAuthenticatedUser } from '../dashboard/store/authenticated-user-store/selectors/authenticated-user.selector';
+import { selectMeasurement } from './store/measurement-store/selectors/measurement.selector';
+import { updateUserCaloriesAction } from './store/user-store/commands/update-user-calories/update-user-calories.action';
 
 @Component({
   selector: 'app-login-measurement',
@@ -37,22 +37,8 @@ export class LoginMeasurementComponent implements OnDestroy {
   private decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
   private authenticatedUser$ = this.store.select(selectAuthenticatedUser);
   private measurement$ = this.store.select(selectMeasurement);
-  private authenticatedUser: AuthenticatedUserResponse = {
-    id: 0,
-    username: '',
-    age: 0,
-    height: 0,
-    goal: '',
-    lifestyle: '',
-    gender: ''
-  };
-  private measurement: MeasurementResponse = {
-    userId: 0,
-    createdOn: new Date(1111, 11, 11),
-    archivedOn: null!,
-    weight: 0,
-    id: 0,
-  };
+  private authenticatedUser: AuthenticatedUserResponse;
+  private measurement: MeasurementResponse;
   private userCalories: number = 0;
   private activityUserCalories: number = 0;
   private goalUserCalories: number = 0;

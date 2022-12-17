@@ -1,7 +1,7 @@
 import { Actions, ofType } from '@ngrx/effects';
 
 
-import { AuthenticatedUserResponse } from '../global-store/authenticated-user/response/authenticated-user.response';
+import { AuthenticatedUserResponse } from './store/authenticated-user-store/response/authenticated-user.response';
 import { ChangeDetectionStrategy, Component, NgZone, OnDestroy } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LayoutService } from '../../../layout/service/app.layout.service';
@@ -13,12 +13,12 @@ import {
   archiveProductUserAction,
   archiveProductUserSuccessAction
 } from './store/product-user-store/commands/archive-product-user/archive-product-user.action';
-import { fetchAuthenticatedUserAction } from '../global-store/authenticated-user/queries/fetch-authenticated-user/fetch-authenticated-user.action';
+import { fetchAuthenticatedUserAction } from './store/authenticated-user-store/queries/fetch-authenticated-user.action';
 import { fetchProductUserListAction } from './store/product-user-store/queries/fetch-product-user-list/fetch-product-user-list.action';
 import { fetchUserMeasurementListAction } from '../user/measurement/store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
 import { formatDate } from '@angular/common';
 import { map } from 'rxjs/operators';
-import { selectAuthenticatedUser } from '../global-store/authenticated-user/selectors/authenticated-user.selector';
+import { selectAuthenticatedUser } from './store/authenticated-user-store/selectors/authenticated-user.selector';
 import { selectProductUserList } from './store/product-user-store/selectors/product-user-list.selector';
 import { selectUserMeasurementList } from '../user/measurement/store/user-measurement-list-store/selectors/user-measurement-list.selector';
 

@@ -1,7 +1,7 @@
 import { MeasurementResponse } from './response/measurement.response';
 import { MeasurementState } from './measurement-state';
 import { createReducer, on } from '@ngrx/store';
-import { fetchMeasurementSuccessAction } from './queries/fetch-measurement/fetch-measurement.action';
+import { fetchMeasurementSuccessAction } from './fetch-measurement/queries/fetch-measurement.action';
 
 export const measurementInitialState: MeasurementState = {
   measurementResponse: {

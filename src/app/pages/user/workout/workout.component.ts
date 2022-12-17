@@ -5,17 +5,17 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Store } from '@ngrx/store';
 import { UserWorkoutListResponse } from './user-workout-list-store/response/user-workout-list.response';
-import { WorkoutListResponse } from '../../global-store/workout-list-store/response/workout-list.response';
+import { WorkoutListResponse } from './workout-list-store/response/workout-list.response';
 import { WorkoutResponse } from './workout-store/response/workout.response';
 import { archiveWorkoutAction, archiveWorkoutSuccessAction } from './workout-store/commands/archive-workout/archive-workout.action';
 import { createWorkoutAction, createWorkoutSuccessAction } from './workout-store/commands/create-workout/create-workout.action';
 import { fetchUserWorkoutListAction } from './user-workout-list-store/queries/fetch-user-workout-list/fetch-user-workout-list.action';
 import { fetchWorkoutAction } from './workout-store/queries/fetch-workout/fetch-workout.action';
-import { fetchWorkoutListAction } from '../../global-store/workout-list-store/queries/fetch-workout-list/fetch-workout-list.action';
+import { fetchWorkoutListAction } from './workout-list-store/queries/fetch-workout-list/fetch-workout-list.action';
 import { map } from 'rxjs/operators';
 import { selectUserWorkoutList } from './user-workout-list-store/selectors/user-workout-list.selector';
 import { selectWorkout } from './workout-store/selectors/workout.selector';
-import { selectWorkoutList } from '../../global-store/workout-list-store/selectors/workout-list.selector';
+import { selectWorkoutList } from './workout-list-store/selectors/workout-list.selector';
 
 @Component({
   templateUrl: './workout.component.html',

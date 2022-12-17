@@ -1,4 +1,4 @@
-import { LoginMeasurementRequest } from './request/login-measurement.request';
+import { LoginMeasurementRequest } from '../request/login-measurement.request';
 import { createAction, props } from '@ngrx/store';
 
 export const loginMeasurementAction = createAction(

@@ -1,7 +1,7 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { LoginMeasurementRequest } from './request/login-measurement.request';
+import { LoginMeasurementRequest } from '../request/login-measurement.request';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
