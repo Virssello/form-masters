@@ -6,7 +6,8 @@ import { fetchMeasurementSuccessAction } from './queries/fetch-measurement/fetch
 export const measurementInitialState: MeasurementState = {
   measurementResponse: {
     id: 0,
-    createdAt: new Date(1111, 11, 11),
+    createdOn: new Date(1111, 11, 11),
+    archivedOn: null!,
     userId: 0,
     weight: 0,
     neck: 0,

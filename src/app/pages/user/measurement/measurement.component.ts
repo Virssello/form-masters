@@ -2,11 +2,13 @@ import { Actions, ofType } from '@ngrx/effects';
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Observable, Subject, takeUntil, tap } from 'rxjs';
+import { Observable, Subject, filter, takeUntil, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { UserMeasurementListResponse } from './store/user-measurement-list-store/response/user-measurement-list.response';
-import { addMeasurementAction, addMeasurementSuccessAction } from './store/user-measurement-list-store/queries/commands/add-measurement.action';
+import { addMeasurementAction, addMeasurementSuccessAction } from './store/user-measurement-list-store/commands/add-measurement/add-measurement.action';
+import { archiveMeasurementAction, archiveMeasurementSuccessAction } from './store/user-measurement-list-store/commands/archive-measurement/archive-measurement.action';
 import { fetchUserMeasurementListAction } from './store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
+import { map } from 'rxjs/operators';
 import { selectUserMeasurementList } from './store/user-measurement-list-store/selectors/user-measurement-list.selector';
 
 @Component({
@@ -15,6 +17,7 @@ import { selectUserMeasurementList } from './store/user-measurement-list-store/s
 })
 export class MeasurementComponent implements OnDestroy {
   public measurements$: Observable<UserMeasurementListResponse[]> = this.store.select(selectUserMeasurementList);
+  public measurements: UserMeasurementListResponse[] = [];
   public addMeasurementForm = this.formBuilder.group({
     weight: [0, Validators.required],
     neck: [0, Validators.required],
@@ -39,7 +42,19 @@ export class MeasurementComponent implements OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe();
 
+    this.actions$.pipe(
+      ofType(archiveMeasurementSuccessAction),
+      tap(() => this.store.dispatch(fetchUserMeasurementListAction({ id: this.decodedToken.id }))),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
     this.store.dispatch(fetchUserMeasurementListAction({ id: this.decodedToken.id }));
+
+    this.store.select(selectUserMeasurementList).pipe(
+      filter((measurements: UserMeasurementListResponse[]) => Boolean(measurements)),
+      map((measurements: UserMeasurementListResponse[]) => this.measurements = measurements),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   public onAddMeasurementFormSubmit(): void {
@@ -54,6 +69,14 @@ export class MeasurementComponent implements OnDestroy {
         biceps: this.addMeasurementForm.value.biceps!,
         calf: this.addMeasurementForm.value.calf!,
         waist: this.addMeasurementForm.value.waist!,
+      }
+    }));
+  }
+  public archiveMeasurement(id: number): void {
+    this.store.dispatch(archiveMeasurementAction({
+      archiveMeasurement: {
+        id: id,
+        archivedOn: new Date()
       }
     }));
   }

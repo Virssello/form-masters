@@ -1,6 +1,7 @@
 export interface MeasurementResponse {
   id: number;
-  createdAt: Date,
+  createdOn: Date,
+  archivedOn: Date
   userId: number,
   weight: number,
   neck?: number,

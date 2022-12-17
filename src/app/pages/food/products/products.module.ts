@@ -1,5 +1,5 @@
 import { AddProductUserEffect } from './store/product-user-store/commands/add-product-user/add-product-user.effect';
-import { DeleteProductUserEffect } from './store/product-user-store/commands/delete-product-user/delete-product-user.effect';
+import { ArchiveProductUserEffect } from '../../dashboard/store/product-user-store/commands/archive-product-user/archive-product-user.effect';
 import { EffectsModule } from '@ngrx/effects';
 import { FetchProductEffect } from './store/product-store/queries/fetch-product/fetch-product.effect';
 import { FetchProductListEffect } from './store/product-list-store/queries/fetch-product-list/fetch-product-list.effect';
@@ -23,7 +23,7 @@ import { productReducer } from './store/product-store/product.reducer';
       FetchProductListEffect,
       FetchProductEffect,
       AddProductUserEffect,
-      DeleteProductUserEffect
+      ArchiveProductUserEffect
     ])
   ],
   declarations: [ProductsComponent]
