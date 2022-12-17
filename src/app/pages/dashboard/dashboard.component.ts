@@ -1,13 +1,18 @@
 import { Actions, ofType } from '@ngrx/effects';
+
+
 import { AuthenticatedUserResponse } from '../global-store/authenticated-user/response/authenticated-user.response';
 import { ChangeDetectionStrategy, Component, NgZone, OnDestroy } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LayoutService } from '../../../layout/service/app.layout.service';
-import { Observable, Subject, Subscription, distinctUntilChanged, take, takeLast, takeUntil, tap } from 'rxjs';
+import { Observable, Subject, Subscription, filter, take, takeLast, takeUntil, tap } from 'rxjs';
 import { ProductUserListResponse } from './store/product-user-store/response/product-user-list.response';
 import { Store } from '@ngrx/store';
 import { UserMeasurementListResponse } from '../user/measurement/store/user-measurement-list-store/response/user-measurement-list.response';
-import { deleteProductUserAction, deleteProductUserSuccessAction } from '../food/products/store/product-user-store/commands/delete-product-user/delete-product-user.action';
+import {
+  archiveProductUserAction,
+  archiveProductUserSuccessAction
+} from './store/product-user-store/commands/archive-product-user/archive-product-user.action';
 import { fetchAuthenticatedUserAction } from '../global-store/authenticated-user/queries/fetch-authenticated-user/fetch-authenticated-user.action';
 import { fetchProductUserListAction } from './store/product-user-store/queries/fetch-product-user-list/fetch-product-user-list.action';
 import { fetchUserMeasurementListAction } from '../user/measurement/store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
@@ -59,8 +64,8 @@ export class DashboardComponent implements OnDestroy {
               private jwtHelperService: JwtHelperService,
               private ngZone: NgZone) {
     this.actions$.pipe(
-      ofType(deleteProductUserSuccessAction),
-      tap(()=> this.store.dispatch(fetchProductUserListAction({ id: this.decodedToken.id }))),
+      ofType(archiveProductUserSuccessAction),
+      tap(() => this.store.dispatch(fetchProductUserListAction({ id: this.decodedToken.id }))),
       takeUntil(this.destroy$)
     ).subscribe();
 
@@ -75,7 +80,7 @@ export class DashboardComponent implements OnDestroy {
       takeLast(1),
       map((productsUser: ProductUserListResponse[]) => {
         productsUser.forEach((productUser: ProductUserListResponse) => {
-          if (formatDate(productUser.createdAt, this.format, this.locale) === this.currentDate) {
+          if (formatDate(productUser.createdOn, this.format, this.locale) === this.currentDate && productUser.archivedOn === null) {
             this.productsUser.push(productUser);
             this.currentlyEatenMacronutrients.calories! += (productUser.product.calories * productUser.weight);
             this.currentlyEatenMacronutrients.protein += (productUser.product.protein * productUser.weight);
@@ -89,14 +94,14 @@ export class DashboardComponent implements OnDestroy {
 
 
     this.userMeasurements$.pipe(
-      take(2),
-      takeLast(1),
-      distinctUntilChanged(),
+      filter((userMeasurement: UserMeasurementListResponse[]) => Boolean(userMeasurement)),
       tap((userMeasurements: UserMeasurementListResponse[]) => this.ngZone.run(
         () => {
-          userMeasurements.forEach((userMeasurement: UserMeasurementListResponse) => {
+          const filteredUserMeasurement = userMeasurements.filter((userMeasurements: UserMeasurementListResponse) => userMeasurements.archivedOn === null);
+
+          filteredUserMeasurement.forEach((userMeasurement: UserMeasurementListResponse) => {
             this.chartWeightData.push(userMeasurement.weight);
-            this.chartCreatedAtLabels.push(formatDate(userMeasurement.createdAt, this.format, this.locale)).toString();
+            this.chartCreatedAtLabels.push(formatDate(userMeasurement.createdOn, this.format, this.locale)).toString();
           });
         }
       )),
@@ -108,6 +113,18 @@ export class DashboardComponent implements OnDestroy {
     });
 
     this.initChart();
+  }
+
+  public deleteProductUser(product: ProductUserListResponse): void {
+    this.store.dispatch(archiveProductUserAction({ archiveProductUser: {
+      id: product.id,
+      archivedOn: new Date()
+    }
+    }));
+    this.currentlyEatenMacronutrients.calories -= (product.product.calories * product.weight);
+    this.currentlyEatenMacronutrients.protein -= (product.product.protein * product.weight);
+    this.currentlyEatenMacronutrients.carbohydrates -= (product.product.carbohydrate * product.weight);
+    this.currentlyEatenMacronutrients.fat -= (product.product.fat * product.weight);
   }
 
   public initChart(): void {
@@ -141,6 +158,12 @@ export class DashboardComponent implements OnDestroy {
           }
         }
       },
+      elements: {
+        point: {
+          pointRadius: 5,
+          pointBorderWidth: 5
+        }
+      },
       scales: {
         x: {
           reverse: true,
@@ -170,9 +193,5 @@ export class DashboardComponent implements OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-  }
-
-  public deleteProductUser(id: number): void {
-    this.store.dispatch(deleteProductUserAction({ id: id }));
   }
 }

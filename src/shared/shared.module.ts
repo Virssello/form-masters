@@ -1,4 +1,5 @@
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { FilterArchivedOnPipe } from './pipes/filter-archived-on.pipe';
 import { NgModule } from '@angular/core';
 import { RouterLinkWithHref } from '@angular/router';
 import { UiModule } from './ui-module';
@@ -11,14 +12,16 @@ import { WrapperComponent } from './components/wrapper/wrapper.component';
   ],
   exports: [
     UiModule,
-    WrapperComponent
+    WrapperComponent,
+    FilterArchivedOnPipe
   ],
   providers: [
     MessageService,
     ConfirmationService
   ],
   declarations: [
-    WrapperComponent
+    WrapperComponent,
+    FilterArchivedOnPipe
   ]
 })
 export class SharedModule {}

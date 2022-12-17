@@ -6,7 +6,8 @@ import { fetchProductUserListSuccessAction } from './queries/fetch-product-user-
 export const productUserListInitialState: ProductUserListState = {
   productUserListResponse: [{
     id: 0,
-    createdAt: new Date(1111, 11, 11),
+    createdOn: new Date(1111, 11, 11),
+    archivedOn: null!,
     userId: 0,
     productId: 0,
     weight: 0,

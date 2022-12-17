@@ -1,10 +1,10 @@
 <div class="grid">
-    <div *ngIf="measurements$ | async as measurements"
+    <div *ngIf="measurements$ | async"
          class="col-12">
         <div class="card">
           <h5>Manage measurements</h5>
             <p-table #dt
-                     [value]="measurements"
+                     [value]="measurements  | filterArchivedOn"
                      responsiveLayout="scroll"
                      [rows]="6"
                      [paginator]="true"
@@ -45,7 +45,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-measurement>
                   <tr>
-                    <td>{{measurement.createdAt | date:'shortDate' }}</td>
+                    <td>{{measurement.createdOn | date:'shortDate' }}</td>
                     <td>{{measurement.weight}}</td>
                     <td>{{measurement.neck}}</td>
                     <td>{{measurement.chest}}</td>
@@ -58,7 +58,8 @@
                       <div class="flex">
                         <button pButton
                                 icon="pi pi-trash"
-                                class="p-button p-component p-button-text p-button-icon-only p-button-danger">
+                                class="p-button p-component p-button-text p-button-icon-only p-button-danger"
+                                (click)="archiveMeasurement(measurement.id)">
                         </button>
                       </div>
                     </td>

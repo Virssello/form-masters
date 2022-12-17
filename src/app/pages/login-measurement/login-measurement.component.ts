@@ -48,7 +48,8 @@ export class LoginMeasurementComponent implements OnDestroy {
   };
   private measurement: MeasurementResponse = {
     userId: 0,
-    createdAt: new Date(1111, 11, 11),
+    createdOn: new Date(1111, 11, 11),
+    archivedOn: null!,
     weight: 0,
     id: 0,
   };

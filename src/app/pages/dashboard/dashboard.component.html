@@ -54,11 +54,11 @@
         </div>
     </div>
     <div class="col-12">
-      <div *ngIf="productsUser$ | async"
+      <div *ngIf="productsUser$ | async as productsUser"
            class="card">
         <h5>Recent products you have eaten</h5>
         <p-table #dt
-                 [value]="productsUser"
+                 [value]="productsUser | filterArchivedOn"
                  [paginator]="true"
                  [rows]="15"
                  responsiveLayout="scroll">
@@ -71,7 +71,7 @@
                                    placeholder="Search by name"
                                    class="w-full sm:w-auto"
                                    (input)="dt.filter($any($event.target).value, 'product.name','contains')"/>
-                        </span>
+              </span>
               <div class="my-2">
                 <button pButton
                         label="New product"
@@ -96,17 +96,17 @@
           <ng-template pTemplate="body" let-product>
             <tr>
               <td>{{product.product.name}}</td>
-              <td>{{product.product.calories * product.weight | number:'.1-3'}}</td>
-              <td>{{product.product.protein * product.weight | number:'.1-3'}}</td>
-              <td>{{product.product.carbohydrate * product.weight | number:'.1-3'}}</td>
-              <td>{{product.product.fat * product.weight | number:'.1-3'}}</td>
-              <td>{{product.weight | number:'.1-3'}} kg</td>
+              <td>{{product.product.calories * product.weight | number:'.1-2'}}</td>
+              <td>{{product.product.protein * product.weight | number:'.1-2'}}</td>
+              <td>{{product.product.carbohydrate * product.weight | number:'.1-2'}}</td>
+              <td>{{product.product.fat * product.weight | number:'.1-2'}}</td>
+              <td>{{product.weight | number:'.1-2'}} kg</td>
               <td style="width: 30px;">
                 <button pButton
                         type="button"
                         icon="pi pi-trash"
                         class="p-button p-component p-button-text p-button-icon-only p-button-danger"
-                        (click)="deleteProductUser(product.id)">
+                        (click)="deleteProductUser(product)">
                 </button>
               </td>
             </tr>
