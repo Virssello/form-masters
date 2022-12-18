@@ -8,6 +8,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../../../../shared/shared.module';
 import { StoreModule } from '@ngrx/store';
 import { USER_WORKOUT_LIST_STATE_FEATURE_KEY } from './user-workout-list-store/user-workout-list-state.selector';
+import { UpdateWorkoutEffect } from './workout-store/commands/update-workout/update-workout.effect';
 import { WORKOUT_LIST_STATE_FEATURE_KEY } from './workout-list-store/workout-list-state.selector';
 import { WORKOUT_STATE_FEATURE_KEY } from './workout-store/workout-state.selector';
 import { WorkoutComponent } from './workout.component';
@@ -28,7 +29,8 @@ import { workoutReducer } from './workout-store/workout.reducer';
       FetchUserWorkoutListEffect,
       FetchWorkoutEffect,
       CreateWorkoutEffect,
-      ArchiveWorkoutEffect
+      ArchiveWorkoutEffect,
+      UpdateWorkoutEffect
     ])
   ],
   declarations: [WorkoutComponent]

@@ -57,6 +57,11 @@
                     <td>
                       <div class="flex">
                         <button pButton
+                                icon="pi pi-pencil"
+                                class="p-button p-component p-button-text p-button-icon-only p-button-warning"
+                                (click)="onOpenEditMeasurementModalDialog(measurement); editMeasurementId = measurement.id">
+                        </button>
+                        <button pButton
                                 icon="pi pi-trash"
                                 class="p-button p-component p-button-text p-button-icon-only p-button-danger"
                                 (click)="archiveMeasurement(measurement.id)">
@@ -67,6 +72,7 @@
                 </ng-template>
             </p-table>
         </div>
+
       <p-dialog [(visible)]="addMeasurementModalDialog"
                 [baseZIndex]="10000"
                 header="Add new measurement">
@@ -190,6 +196,134 @@
                     icon="pi pi-save"
                     class="w-full p-3 text-xl"
                     (click)="onAddMeasurementFormSubmit()">
+            </button>
+          </div>
+        </form>
+      </p-dialog>
+
+      <p-dialog [(visible)]="editMeasurementModalDialog"
+                [baseZIndex]="10000"
+                header="Edit measurement">
+        <form [formGroup]="editMeasurementForm">
+          <label for="editWeight"
+                 class="block text-700 font-medium text-xl mb-2">Weight
+          </label>
+          <p-inputNumber id="editWeight"
+                         [formControlName]="'weight'"
+                         [showButtons]="true"
+                         [min]="1"
+                         [max]="200"
+                         mode="decimal"
+                         inputId="minmax-buttons"
+                         styleClass="w-full md:w-30rem mb-5"
+                         suffix=" kg"
+                         decrementButtonClass="p-button-secondary"
+                         incrementButtonClass="p-button-secondary">
+          </p-inputNumber>
+
+          <label for="editNeck"
+                 class="block text-700 font-medium text-xl mb-2">Neck
+          </label>
+          <p-inputNumber id="editNeck"
+                         [formControlName]="'neck'"
+                         [showButtons]="true"
+                         [min]="1"
+                         [max]="200"
+                         mode="decimal"
+                         inputId="minmax-buttons"
+                         styleClass="w-full md:w-30rem mb-5"
+                         suffix=" cm"
+                         decrementButtonClass="p-button-secondary"
+                         incrementButtonClass="p-button-secondary">
+          </p-inputNumber>
+
+          <label for="editChest"
+                 class="block text-700 font-medium text-xl mb-2">Chest
+          </label>
+          <p-inputNumber id="editChest"
+                         [formControlName]="'chest'"
+                         [showButtons]="true"
+                         [min]="1"
+                         [max]="200"
+                         mode="decimal"
+                         inputId="minmax-buttons"
+                         styleClass="w-full md:w-30rem mb-5"
+                         suffix=" cm"
+                         decrementButtonClass="p-button-secondary"
+                         incrementButtonClass="p-button-secondary">
+          </p-inputNumber>
+
+          <label for="editStomach"
+                 class="block text-700 font-medium text-xl mb-2">Stomach
+          </label>
+          <p-inputNumber id="editStomach"
+                         [formControlName]="'stomach'"
+                         [showButtons]="true"
+                         [min]="1"
+                         [max]="200"
+                         mode="decimal"
+                         inputId="minmax-buttons"
+                         styleClass="w-full md:w-30rem mb-5"
+                         suffix=" cm"
+                         decrementButtonClass="p-button-secondary"
+                         incrementButtonClass="p-button-secondary">
+          </p-inputNumber>
+
+          <label for="editHips"
+                 class="block text-700 font-medium text-xl mb-2">Hips
+          </label>
+          <p-inputNumber id="editHips"
+                         [formControlName]="'hips'"
+                         [showButtons]="true"
+                         [min]="1"
+                         [max]="200"
+                         mode="decimal"
+                         inputId="minmax-buttons"
+                         styleClass="w-full md:w-30rem mb-5"
+                         suffix=" cm"
+                         decrementButtonClass="p-button-secondary"
+                         incrementButtonClass="p-button-secondary">
+          </p-inputNumber>
+
+          <label for="editCalf"
+                 class="block text-700 font-medium text-xl mb-2">Calf
+          </label>
+          <p-inputNumber id="editCalf"
+                         [formControlName]="'calf'"
+                         [showButtons]="true"
+                         [min]="1"
+                         [max]="200"
+                         mode="decimal"
+                         inputId="minmax-buttons"
+                         styleClass="w-full md:w-30rem mb-5"
+                         suffix=" cm"
+                         decrementButtonClass="p-button-secondary"
+                         incrementButtonClass="p-button-secondary">
+          </p-inputNumber>
+
+          <label for="editWaist"
+                 class="block text-700 font-medium text-xl mb-2">Waist
+          </label>
+          <p-inputNumber id="editWaist"
+                         [formControlName]="'waist'"
+                         [showButtons]="true"
+                         [min]="1"
+                         [max]="200"
+                         mode="decimal"
+                         inputId="minmax-buttons"
+                         styleClass="w-full md:w-30rem mb-5"
+                         suffix=" cm"
+                         decrementButtonClass="p-button-secondary"
+                         incrementButtonClass="p-button-secondary">
+          </p-inputNumber>
+
+          <div class="flex flex-column align-items-center justify-content-between mb-5 gap-5">
+            <button pButton
+                    pRipple
+                    label="Save changes"
+                    icon="pi pi-save"
+                    class="w-full p-3 text-xl"
+                    (click)="onEditMeasurementFormSubmit()">
             </button>
           </div>
         </form>

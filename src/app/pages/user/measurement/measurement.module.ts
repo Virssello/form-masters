@@ -8,6 +8,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../../../../shared/shared.module';
 import { StoreModule } from '@ngrx/store';
 import { USER_MEASUREMENT_LIST_STATE_FEATURE_KEY } from './store/user-measurement-list-store/user-measurement-list-state.selector';
+import { UpdateMeasurementEffect } from './store/user-measurement-list-store/commands/update-measurement/update-measurement.effect';
 import { userMeasurementListReducer } from './store/user-measurement-list-store/user-measurement-list.reducer';
 
 @NgModule({
@@ -18,7 +19,8 @@ import { userMeasurementListReducer } from './store/user-measurement-list-store/
     EffectsModule.forFeature([
       FetchUserMeasurementListEffect,
       AddMeasurementEffect,
-      ArchiveMeasurementEffect
+      ArchiveMeasurementEffect,
+      UpdateMeasurementEffect
     ]),
   ],
   declarations: [MeasurementComponent]

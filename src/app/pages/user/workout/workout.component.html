@@ -59,7 +59,7 @@
                         label="New workout"
                         icon="pi pi-plus"
                         class="p-button-success mr-2"
-                        (click)="showFormModalDialog()">
+                        (click)="showAddFormModalDialog()">
                 </button>
               </div>
               </span>
@@ -71,14 +71,21 @@
                   <div class="flex-1 flex justify-content-between text-center md:text-left">
                     <button pButton
                             label="{{userWorkout.name}}"
-                            class="font-bold text-xl p-button-raised p-button-secondary"
+                            class="font-bold text-xl p-button-raised p-button-secondary p-button-outlined"
                             (click)="showModalDialog(userWorkout.id)">
                     </button>
-                    <button pButton
-                            icon="pi pi-trash"
-                            class="p-button p-component p-button-text p-button-icon-only p-button-danger"
-                            (click)="archiveWorkout(userWorkout.id)">
-                    </button>
+                    <div>
+                      <button pButton
+                              icon="pi pi-pencil"
+                              class="p-button p-component p-button-text p-button-icon-only p-button-warning"
+                              (click)="showEditFormModalDialog(userWorkout); editWorkoutId = userWorkout.id">
+                      </button>
+                      <button pButton
+                              icon="pi pi-trash"
+                              class="p-button p-component p-button-text p-button-icon-only p-button-danger"
+                              (click)="archiveWorkout(userWorkout.id)">
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -111,11 +118,11 @@
     </p-fieldset>
   </p-dialog>
 
-  <p-dialog [(visible)]="displayFormModal"
+  <p-dialog [(visible)]="displayAddFormModal"
             [style]="{width: '30vw'}"
             [baseZIndex]="10000"
             header="Create new workout">
-    <form [formGroup]="workoutForm">
+    <form [formGroup]="workoutAddForm">
       <p-fieldset legend="Name">
         <span class="p-float-label">
             <input pInputText
@@ -141,7 +148,42 @@
               label="Create workout"
               icon="pi pi-save"
               class="mr-2"
-              (click)="onFormModalDialogSubmit()">
+              (click)="onAddFormModalDialogSubmit()">
+      </button>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog [(visible)]="displayEditFormModal"
+            [style]="{width: '30vw'}"
+            [baseZIndex]="10000"
+            header="Edit workout">
+    <form [formGroup]="workoutEditForm">
+      <p-fieldset legend="Name">
+        <span class="p-float-label">
+            <input pInputText
+                   id="editName"
+                   [formControlName]="'name'"
+                   type="text">
+            <label for="editName">Workout name</label>
+        </span>
+      </p-fieldset>
+      <p-fieldset legend="Exercises">
+        <div class="p-float-label">
+          <p-chips id="editExercises"
+                   pTooltip="To separate exercises press ENTER"
+                   tooltipPosition="right"
+                   [formControlName]="'exercises'">
+          </p-chips>
+          <label for="editExercises">Exercises names</label>
+        </div>
+      </p-fieldset>
+    </form>
+    <ng-template pTemplate="footer">
+      <button pButton
+              label="Save changes"
+              icon="pi pi-save"
+              class="mr-2"
+              (click)="onEditFormModalDialogSubmit()">
       </button>
     </ng-template>
   </p-dialog>

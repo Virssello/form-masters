@@ -16,6 +16,10 @@ import { map } from 'rxjs/operators';
 import { selectUserWorkoutList } from './user-workout-list-store/selectors/user-workout-list.selector';
 import { selectWorkout } from './workout-store/selectors/workout.selector';
 import { selectWorkoutList } from './workout-list-store/selectors/workout-list.selector';
+import {
+  updateWorkoutAction,
+  updateWorkoutSuccessAction
+} from './workout-store/commands/update-workout/update-workout.action';
 
 @Component({
   templateUrl: './workout.component.html',
@@ -28,13 +32,20 @@ export class WorkoutComponent implements OnDestroy {
   public workout$: Observable<WorkoutResponse> = this.store.select(selectWorkout);
   public workoutId$ = new BehaviorSubject<number>(0);
   public userWorkouts: UserWorkoutListResponse[] = [];
-  public workoutForm = this.formBuilder.group(({
+  public workoutAddForm = this.formBuilder.group(({
     name: ['', Validators.required],
     exercises: [[], Validators.required]
   }));
+
+  public workoutEditForm = this.formBuilder.group(({
+    name: ['', Validators.required],
+    exercises: [[''], Validators.required]
+  }));
   public responsiveOptions;
   public displayModal: boolean;
-  public displayFormModal: boolean = false;
+  public displayAddFormModal: boolean = false;
+  public displayEditFormModal: boolean = false;
+  public editWorkoutId: number;
   private destroy$ = new Subject<void>;
   private decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
 
@@ -47,7 +58,7 @@ export class WorkoutComponent implements OnDestroy {
 
     this.actions$.pipe(
       ofType(createWorkoutSuccessAction),
-      tap(() => this.displayFormModal = false),
+      tap(() => this.displayAddFormModal = false),
       tap(() => this.store.dispatch(fetchUserWorkoutListAction({ id: this.decodedToken.id }))),
       tap(() => this.changeDetectorRef.detectChanges()),
       takeUntil(this.destroy$)
@@ -55,6 +66,13 @@ export class WorkoutComponent implements OnDestroy {
 
     this.actions$.pipe(
       ofType(archiveWorkoutSuccessAction),
+      tap(() => this.store.dispatch(fetchUserWorkoutListAction({ id: this.decodedToken.id }))),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
+    this.actions$.pipe(
+      ofType(updateWorkoutSuccessAction),
+      tap(() => this.displayEditFormModal = false),
       tap(() => this.store.dispatch(fetchUserWorkoutListAction({ id: this.decodedToken.id }))),
       takeUntil(this.destroy$)
     ).subscribe();
@@ -94,16 +112,34 @@ export class WorkoutComponent implements OnDestroy {
     this.store.dispatch(fetchWorkoutAction({ id: this.workoutId$.value }));
   }
 
-  public showFormModalDialog(): void {
-    this.displayFormModal = true;
+  public showAddFormModalDialog(): void {
+    this.displayAddFormModal = true;
   }
 
-  public onFormModalDialogSubmit(): void {
+  public showEditFormModalDialog(workout: UserWorkoutListResponse): void {
+    this.displayEditFormModal = true;
+    this.workoutEditForm.patchValue({
+      name: workout.name,
+      exercises: workout.exercises
+    });
+  }
+
+  public onAddFormModalDialogSubmit(): void {
     this.store.dispatch(createWorkoutAction({
       workout: {
         userId: this.decodedToken.id,
-        name: this.workoutForm.value.name!,
-        exercises: this.workoutForm.value.exercises!
+        name: this.workoutAddForm.value.name!,
+        exercises: this.workoutAddForm.value.exercises!
+      }
+    }));
+  }
+
+  public onEditFormModalDialogSubmit(): void {
+    this.store.dispatch(updateWorkoutAction({
+      updateWorkout: {
+        id: this.editWorkoutId,
+        name: this.workoutEditForm.value.name!,
+        exercises: this.workoutEditForm.value.exercises!
       }
     }));
   }

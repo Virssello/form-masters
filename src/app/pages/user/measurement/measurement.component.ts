@@ -10,6 +10,10 @@ import { archiveMeasurementAction, archiveMeasurementSuccessAction } from './sto
 import { fetchUserMeasurementListAction } from './store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
 import { map } from 'rxjs/operators';
 import { selectUserMeasurementList } from './store/user-measurement-list-store/selectors/user-measurement-list.selector';
+import {
+  updateMeasurementAction,
+  updateMeasurementSuccessAction
+} from './store/user-measurement-list-store/commands/update-measurement/update-measurement.action';
 
 @Component({
   templateUrl: './measurement.component.html',
@@ -28,7 +32,19 @@ export class MeasurementComponent implements OnDestroy {
     calf: [0, Validators.required],
     waist: [0, Validators.required]
   });
+  public editMeasurementForm = this.formBuilder.group({
+    weight: [0, Validators.required],
+    neck: [0, Validators.required],
+    chest: [0, Validators.required],
+    stomach: [0, Validators.required],
+    hips: [0, Validators.required],
+    biceps: [0, Validators.required],
+    calf: [0, Validators.required],
+    waist: [0, Validators.required]
+  });
   public addMeasurementModalDialog: boolean = false;
+  public editMeasurementModalDialog: boolean = false;
+  public editMeasurementId: number;
   private destroy$ = new Subject<void>;
   private decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
   constructor(private store: Store,
@@ -38,6 +54,13 @@ export class MeasurementComponent implements OnDestroy {
     this.actions$.pipe(
       ofType(addMeasurementSuccessAction),
       tap(()=> this.addMeasurementModalDialog = false),
+      tap(() => this.store.dispatch(fetchUserMeasurementListAction({ id: this.decodedToken.id }))),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
+    this.actions$.pipe(
+      ofType(updateMeasurementSuccessAction),
+      tap(()=> this.editMeasurementModalDialog = false),
       tap(() => this.store.dispatch(fetchUserMeasurementListAction({ id: this.decodedToken.id }))),
       takeUntil(this.destroy$)
     ).subscribe();
@@ -69,6 +92,35 @@ export class MeasurementComponent implements OnDestroy {
         biceps: this.addMeasurementForm.value.biceps!,
         calf: this.addMeasurementForm.value.calf!,
         waist: this.addMeasurementForm.value.waist!,
+      }
+    }));
+  }
+
+  public onOpenEditMeasurementModalDialog(measurement: UserMeasurementListResponse): void {
+    this.editMeasurementModalDialog = true;
+    this.editMeasurementForm.patchValue({
+      weight: measurement.weight,
+      biceps: measurement.biceps,
+      calf: measurement.calf,
+      chest: measurement.chest,
+      hips: measurement.hips,
+      neck: measurement.neck,
+      stomach: measurement.stomach,
+      waist: measurement.waist
+    });
+  }
+  public onEditMeasurementFormSubmit(): void {
+    this.store.dispatch(updateMeasurementAction({
+      updateMeasurement: {
+        id: this.editMeasurementId,
+        weight: this.editMeasurementForm.value.weight!,
+        biceps: this.editMeasurementForm.value.biceps!,
+        calf: this.editMeasurementForm.value.calf!,
+        chest: this.editMeasurementForm.value.chest!,
+        hips: this.editMeasurementForm.value.hips!,
+        neck: this.editMeasurementForm.value.neck!,
+        stomach: this.editMeasurementForm.value.stomach!,
+        waist: this.editMeasurementForm.value.waist!,
       }
     }));
   }
