@@ -2,7 +2,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserResponse } from '../../response/user.response';
-import { catchError, of, switchMap } from 'rxjs';
+import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { fetchUserAction, fetchUserErrorAction, fetchUserSuccessAction } from './fetch-user.action';
 import { map } from 'rxjs/operators';
 
@@ -13,6 +13,7 @@ export class FetchUserEffect {
 
   public authenticatedUser$ = createEffect(() => this.actions$.pipe(
     ofType(fetchUserAction),
+    debounceTime(2000),
     switchMap(({ id }: { id: number }) => {
       return this.httpClient.get<UserResponse>(`api/users/${id}`)
         .pipe(

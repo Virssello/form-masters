@@ -35,11 +35,11 @@
 
     </div>
   <div class="col-12">
-    <div *ngIf="userWorkouts$ | async"
-         class="col-12">
+    <div class="col-12">
       <div class="card">
         <h5>Your workouts</h5>
           <p-dataView #dv
+                      *ngIf="userWorkouts$ | async as userWorkouts"
                       [value]="userWorkouts | filterArchivedOn"
                       [paginator]="true"
                       [rows]="3"

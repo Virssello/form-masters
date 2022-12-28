@@ -55,9 +55,8 @@ export class WorkoutComponent implements OnDestroy {
 
     this.actions$.pipe(
       ofType(createWorkoutSuccessAction),
-      tap(() => this.displayAddFormModal = false),
       tap(() => this.store.dispatch(fetchUserWorkoutListAction({ id: this.decodedToken.id }))),
-      tap(() => this.changeDetectorRef.detectChanges()),
+      tap(() => this.displayAddFormModal = false),
       takeUntil(this.destroy$)
     ).subscribe();
 
@@ -69,8 +68,8 @@ export class WorkoutComponent implements OnDestroy {
 
     this.actions$.pipe(
       ofType(updateWorkoutSuccessAction),
-      tap(() => this.displayEditFormModal = false),
       tap(() => this.store.dispatch(fetchUserWorkoutListAction({ id: this.decodedToken.id }))),
+      tap(() => this.displayEditFormModal = false),
       takeUntil(this.destroy$)
     ).subscribe();
 
@@ -140,6 +139,7 @@ export class WorkoutComponent implements OnDestroy {
       }
     }));
   }
+
   public archiveWorkout(id: number): void {
     this.store.dispatch(archiveWorkoutAction({
       archiveWorkout: {

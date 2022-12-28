@@ -4,7 +4,7 @@
         <div class="card">
           <h5>Manage measurements</h5>
             <p-table #dt
-                     [value]="measurements  | filterArchivedOn"
+                     [value]="measurements | filterArchivedOn"
                      responsiveLayout="scroll"
                      [rows]="6"
                      [paginator]="true"
@@ -24,7 +24,7 @@
                                   label="New measurement"
                                   icon="pi pi-plus"
                                   class="p-button-success mr-2"
-                                  (click)="addMeasurementModalDialog = true">
+                                  (click)="onOpenAddMeasurementModalDialog()">
                           </button>
                         </div>
                     </div>

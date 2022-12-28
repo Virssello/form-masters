@@ -86,7 +86,8 @@ const PRIMENG_MODULES = [
   ChipsModule,
   ToolbarModule,
   PickListModule,
-  ChartModule
+  ChartModule,
+  ProgressSpinnerModule
 ];
 
 const MODULES = [

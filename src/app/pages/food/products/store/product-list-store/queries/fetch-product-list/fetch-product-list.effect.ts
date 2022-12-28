@@ -2,7 +2,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ProductListResponse } from '../../response/product-list.response';
-import { catchError, of, switchMap } from 'rxjs';
+import { catchError, debounceTime, of, switchMap } from 'rxjs';
 import { fetchProductListAction, fetchProductListErrorAction, fetchProductListSuccessAction } from './fetch-product-list.action';
 import { map } from 'rxjs/operators';
 
@@ -13,6 +13,7 @@ export class FetchProductListEffect {
 
   public productListEffect$ = createEffect(() => this.actions$.pipe(
     ofType(fetchProductListAction),
+    debounceTime(2000),
     switchMap(() => {
       return this.httpClient.get<ProductListResponse[]>('api/products')
         .pipe(

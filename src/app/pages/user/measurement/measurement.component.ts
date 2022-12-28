@@ -8,12 +8,8 @@ import { UserMeasurementListResponse } from './store/user-measurement-list-store
 import { addMeasurementAction, addMeasurementSuccessAction } from './store/user-measurement-list-store/commands/add-measurement/add-measurement.action';
 import { archiveMeasurementAction, archiveMeasurementSuccessAction } from './store/user-measurement-list-store/commands/archive-measurement/archive-measurement.action';
 import { fetchUserMeasurementListAction } from './store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
-import { map } from 'rxjs/operators';
 import { selectUserMeasurementList } from './store/user-measurement-list-store/selectors/user-measurement-list.selector';
-import {
-  updateMeasurementAction,
-  updateMeasurementSuccessAction
-} from './store/user-measurement-list-store/commands/update-measurement/update-measurement.action';
+import { updateMeasurementAction, updateMeasurementSuccessAction } from './store/user-measurement-list-store/commands/update-measurement/update-measurement.action';
 
 @Component({
   templateUrl: './measurement.component.html',
@@ -75,9 +71,23 @@ export class MeasurementComponent implements OnDestroy {
 
     this.store.select(selectUserMeasurementList).pipe(
       filter((measurements: UserMeasurementListResponse[]) => Boolean(measurements)),
-      map((measurements: UserMeasurementListResponse[]) => this.measurements = measurements),
+      tap((measurements: UserMeasurementListResponse[]) => this.measurements = measurements),
       takeUntil(this.destroy$)
     ).subscribe();
+  }
+
+  public onOpenAddMeasurementModalDialog(): void {
+    this.addMeasurementModalDialog = true;
+    this.addMeasurementForm.patchValue({
+      weight: 0,
+      biceps: 0,
+      calf: 0,
+      chest: 0,
+      hips: 0,
+      neck: 0,
+      stomach: 0,
+      waist: 0
+    });
   }
 
   public onAddMeasurementFormSubmit(): void {
@@ -109,6 +119,7 @@ export class MeasurementComponent implements OnDestroy {
       waist: measurement.waist
     });
   }
+
   public onEditMeasurementFormSubmit(): void {
     this.store.dispatch(updateMeasurementAction({
       updateMeasurement: {
@@ -124,6 +135,7 @@ export class MeasurementComponent implements OnDestroy {
       }
     }));
   }
+
   public archiveMeasurement(id: number): void {
     this.store.dispatch(archiveMeasurementAction({
       archiveMeasurement: {
