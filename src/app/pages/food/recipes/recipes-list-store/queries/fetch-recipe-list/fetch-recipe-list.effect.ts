@@ -11,7 +11,7 @@ export class FetchRecipeListEffect {
   constructor(private actions$: Actions,
               private httpClient: HttpClient) {}
 
-  public receipeListEffect$ = createEffect(() => this.actions$.pipe(
+  public recipeListEffect$ = createEffect(() => this.actions$.pipe(
     ofType(fetchRecipeListAction),
     debounceTime(2000),
     switchMap(() => {

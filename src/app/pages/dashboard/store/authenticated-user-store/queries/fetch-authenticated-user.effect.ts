@@ -3,7 +3,7 @@ import { AuthenticatedUserResponse } from '../response/authenticated-user.respon
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { catchError, of, switchMap } from 'rxjs';
 import { fetchAuthenticatedUserAction, fetchAuthenticatedUserErrorAction, fetchAuthenticatedUserSuccessAction } from './fetch-authenticated-user.action';
 import { map } from 'rxjs/operators';
 
@@ -15,7 +15,6 @@ export class FetchAuthenticatedUserEffect {
 
   public authenticatedUser$ = createEffect(() => this.actions$.pipe(
     ofType(fetchAuthenticatedUserAction),
-    debounceTime(2000),
     switchMap(() => {
       const decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
 

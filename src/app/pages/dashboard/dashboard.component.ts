@@ -1,26 +1,22 @@
 import { Actions, ofType } from '@ngrx/effects';
-
-
+import { AfterViewInit, ChangeDetectionStrategy, Component, NgZone, OnDestroy } from '@angular/core';
 import { AuthenticatedUserResponse } from './store/authenticated-user-store/response/authenticated-user.response';
-import { ChangeDetectionStrategy, Component, NgZone, OnDestroy } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LayoutService } from '../../../layout/service/app.layout.service';
 import { Observable, Subject, Subscription, filter, take, takeLast, takeUntil, tap } from 'rxjs';
 import { ProductUserListResponse } from './store/product-user-store/response/product-user-list.response';
 import { Store } from '@ngrx/store';
 import { UserMeasurementListResponse } from '../user/measurement/store/user-measurement-list-store/response/user-measurement-list.response';
-import {
-  archiveProductUserAction,
-  archiveProductUserSuccessAction
-} from './store/product-user-store/commands/archive-product-user/archive-product-user.action';
-import { fetchAuthenticatedUserAction } from './store/authenticated-user-store/queries/fetch-authenticated-user.action';
-import { fetchProductUserListAction } from './store/product-user-store/queries/fetch-product-user-list/fetch-product-user-list.action';
-import { fetchUserMeasurementListAction } from '../user/measurement/store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
+import { archiveProductUserAction, archiveProductUserSuccessAction } from './store/product-user-store/commands/archive-product-user/archive-product-user.action';
+import { fetchAuthenticatedUserAction, fetchAuthenticatedUserSuccessAction } from './store/authenticated-user-store/queries/fetch-authenticated-user.action';
+import { fetchProductUserListAction, fetchProductUserListSuccessAction } from './store/product-user-store/queries/fetch-product-user-list/fetch-product-user-list.action';
+import { fetchUserMeasurementListAction, fetchUserMeasurementListSuccessAction } from '../user/measurement/store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
 import { formatDate } from '@angular/common';
 import { map } from 'rxjs/operators';
 import { selectAuthenticatedUser } from './store/authenticated-user-store/selectors/authenticated-user.selector';
 import { selectProductUserList } from './store/product-user-store/selectors/product-user-list.selector';
 import { selectUserMeasurementList } from '../user/measurement/store/user-measurement-list-store/selectors/user-measurement-list.selector';
+import { setLoadingAction } from '../../../shared/services/set-loading/set-loading.action';
 
 export type Macronutrients = {
   calories: number,
@@ -33,7 +29,7 @@ export type Macronutrients = {
   templateUrl: './dashboard.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardComponent implements OnDestroy {
+export class DashboardComponent implements AfterViewInit, OnDestroy {
   public authenticatedUser$: Observable<AuthenticatedUserResponse> = this.store.select(selectAuthenticatedUser);
   public userMeasurements$: Observable<UserMeasurementListResponse[]> = this.store.select(selectUserMeasurementList);
   public productsUser$: Observable<ProductUserListResponse[]> = this.store.select(selectProductUserList);
@@ -63,9 +59,17 @@ export class DashboardComponent implements OnDestroy {
               private actions$: Actions,
               private jwtHelperService: JwtHelperService,
               private ngZone: NgZone) {
+    this.store.dispatch(setLoadingAction({ showLoading: true }));
+
     this.actions$.pipe(
       ofType(archiveProductUserSuccessAction),
       tap(() => this.store.dispatch(fetchProductUserListAction({ id: this.decodedToken.id }))),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
+    this.actions$.pipe(
+      ofType(fetchAuthenticatedUserSuccessAction, fetchProductUserListSuccessAction, fetchUserMeasurementListSuccessAction),
+      tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
       takeUntil(this.destroy$)
     ).subscribe();
 
@@ -91,7 +95,6 @@ export class DashboardComponent implements OnDestroy {
       }),
       takeUntil(this.destroy$)
     ).subscribe();
-
 
     this.userMeasurements$.pipe(
       filter((userMeasurement: UserMeasurementListResponse[]) => Boolean(userMeasurement)),
@@ -193,5 +196,11 @@ export class DashboardComponent implements OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  public ngAfterViewInit(): void {
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 1000);
   }
 }

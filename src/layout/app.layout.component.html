@@ -5,11 +5,14 @@
     </div>
     <div class="layout-main-container">
         <div class="layout-main">
-            <router-outlet></router-outlet>
+          <app-loading-spinner *ngIf="showLoading$ | async"></app-loading-spinner>
+          <div [ngStyle]="{ 'display': !(showLoading$ | async) ? 'block' : 'none' }">
+            <router-outlet>
+            </router-outlet>
+          </div>
         </div>
         <app-footer></app-footer>
     </div>
-    <app-config></app-config>
     <div class="layout-mask"></div>
 </div>
 

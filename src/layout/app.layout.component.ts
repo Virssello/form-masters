@@ -3,7 +3,9 @@ import { AppTopBarComponent } from './app.topbar.component';
 import { Component, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
 import { NavigationEnd, Router } from '@angular/router';
-import { Subscription, filter } from 'rxjs';
+import { Observable, Subscription, filter } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectLoading } from '../shared/services/set-loading/set-loading.selector';
 
 @Component({
   selector: 'app-layout',
@@ -11,6 +13,7 @@ import { Subscription, filter } from 'rxjs';
 })
 export class AppLayoutComponent implements OnDestroy {
 
+  public showLoading$: Observable<boolean>;
   public overlayMenuOpenSubscription: Subscription;
 
   public menuOutsideClickListener: any;
@@ -21,7 +24,12 @@ export class AppLayoutComponent implements OnDestroy {
 
   @ViewChild(AppTopBarComponent) public appTopbar!: AppTopBarComponent;
 
-  constructor(public layoutService: LayoutService, public renderer: Renderer2, public router: Router) {
+  constructor(public layoutService: LayoutService,
+              public renderer: Renderer2,
+              public router: Router,
+              private store: Store) {
+    this.showLoading$ = this.store.select(selectLoading);
+
     this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
       if (!this.menuOutsideClickListener) {
         this.menuOutsideClickListener = this.renderer.listen('document', 'click', (event: any) => {

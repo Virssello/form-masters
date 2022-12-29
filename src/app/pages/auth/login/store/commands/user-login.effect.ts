@@ -4,9 +4,10 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subject, catchError, of, switchMap, takeUntil, tap } from 'rxjs';
+import { Subject, catchError, debounceTime, of, switchMap, takeUntil, tap } from 'rxjs';
 import { UserLoginRequest } from '../request/user-login.request';
 import { UserLoginResponse } from '../response/user-login.response';
+import { fetchAuthenticatedUserAction } from '../../../../dashboard/store/authenticated-user-store/queries/fetch-authenticated-user.action';
 import { map } from 'rxjs/operators';
 import { selectAuthenticatedUserCalories } from '../../../../dashboard/store/authenticated-user-store/selectors/authenticated-user-calories.selector';
 import { userLoginAction, userLoginErrorAction, userLoginSuccessAction } from './user-login.action';
@@ -30,8 +31,11 @@ export class UserLoginEffect implements OnDestroy {
             localStorage.setItem('token', token.token);
             return userLoginSuccessAction({ token: token });
           }),
+          debounceTime(1000),
           tap(() => {
+            this.store.dispatch(fetchAuthenticatedUserAction());
             this.store.select(selectAuthenticatedUserCalories).pipe(
+              debounceTime(2000),
               tap((calories: number) => {
                 if (Boolean(calories > 0)) {
                   return this.router.navigate(['/home']);

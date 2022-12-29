@@ -29,11 +29,7 @@ import { RouterModule } from '@angular/router';
               path: 'food',
               loadChildren: () => import('./pages/food/food.module').then(({ FoodModule }: any) => FoodModule)
             },
-            {
-              path: 'settings',
-              loadChildren: () => import('./pages/settings/settings.module').then(({ SettingsModule }: any) => SettingsModule)
-            },
-          ],
+          ]
         },
         {
           path: 'auth',

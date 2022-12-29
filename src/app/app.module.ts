@@ -8,6 +8,7 @@ import { ExitComponent } from './pages/exit/exit.component';
 import { FoodModule } from './pages/food/food.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HttpErrorInterceptor } from '../shared/interceptors/http-error.interceptor';
 import { HttpRequestInterceptor } from '../shared/interceptors/http-request.interceptor';
 import { JwtModule } from '@auth0/angular-jwt';
 import { MeasurementModule } from './pages/user/measurement/measurement.module';
@@ -54,7 +55,12 @@ import { environment } from '../environments/environment';
     },
     {
       provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true
-    }
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent]
 })

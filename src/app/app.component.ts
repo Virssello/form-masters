@@ -7,7 +7,6 @@ import { PrimeNGConfig } from 'primeng/api';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public title = 'login-measurement-masters';
   constructor(private primengConfig: PrimeNGConfig) { }
 
   public ngOnInit(): void {
