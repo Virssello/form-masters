@@ -28,6 +28,8 @@ export class RecipesComponent implements OnDestroy {
 
   constructor(private store: Store,
               private actions$: Actions) {
+    this.store.dispatch(setLoadingAction({ showLoading: true }));
+
     this.store.dispatch(fetchRecipeListAction());
 
     this.actions$.pipe(
@@ -38,6 +40,12 @@ export class RecipesComponent implements OnDestroy {
 
     this.recipes$.pipe(
       tap((recipeList: RecipeListResponse[]) => this.recipes = recipeList),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
+    this.actions$.pipe(
+      ofType(fetchRecipeListSuccessAction),
+      tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
       takeUntil(this.destroy$)
     ).subscribe();
   }

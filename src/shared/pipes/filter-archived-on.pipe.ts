@@ -6,9 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FilterArchivedOnPipe implements PipeTransform {
 
   public transform(values: any[]): any[] {
-    const filteredValues = values.filter((item: any) => item.archivedOn === null);
-
-    return filteredValues;
+    return values.filter((item: any) => item.archivedOn === null);
   }
 
 }

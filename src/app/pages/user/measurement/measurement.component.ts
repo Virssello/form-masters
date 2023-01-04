@@ -7,8 +7,9 @@ import { Store } from '@ngrx/store';
 import { UserMeasurementListResponse } from './store/user-measurement-list-store/response/user-measurement-list.response';
 import { addMeasurementAction, addMeasurementSuccessAction } from './store/user-measurement-list-store/commands/add-measurement/add-measurement.action';
 import { archiveMeasurementAction, archiveMeasurementSuccessAction } from './store/user-measurement-list-store/commands/archive-measurement/archive-measurement.action';
-import { fetchUserMeasurementListAction } from './store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
+import { fetchUserMeasurementListAction, fetchUserMeasurementListSuccessAction } from './store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
 import { selectUserMeasurementList } from './store/user-measurement-list-store/selectors/user-measurement-list.selector';
+import { setLoadingAction } from '../../../../shared/services/set-loading/set-loading.action';
 import { updateMeasurementAction, updateMeasurementSuccessAction } from './store/user-measurement-list-store/commands/update-measurement/update-measurement.action';
 
 @Component({
@@ -47,6 +48,14 @@ export class MeasurementComponent implements OnDestroy {
               private actions$: Actions,
               private formBuilder: FormBuilder,
               private jwtHelperService: JwtHelperService) {
+    this.store.dispatch(setLoadingAction({ showLoading: true }));
+
+    this.actions$.pipe(
+      ofType(fetchUserMeasurementListSuccessAction),
+      tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
     this.actions$.pipe(
       ofType(addMeasurementSuccessAction),
       tap(()=> this.addMeasurementModalDialog = false),

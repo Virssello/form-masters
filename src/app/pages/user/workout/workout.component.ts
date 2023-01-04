@@ -9,13 +9,14 @@ import { WorkoutListResponse } from './workout-list-store/response/workout-list.
 import { WorkoutResponse } from './workout-store/response/workout.response';
 import { archiveWorkoutAction, archiveWorkoutSuccessAction } from './workout-store/commands/archive-workout/archive-workout.action';
 import { createWorkoutAction, createWorkoutSuccessAction } from './workout-store/commands/create-workout/create-workout.action';
-import { fetchUserWorkoutListAction } from './user-workout-list-store/queries/fetch-user-workout-list/fetch-user-workout-list.action';
+import { fetchUserWorkoutListAction, fetchUserWorkoutListSuccessAction } from './user-workout-list-store/queries/fetch-user-workout-list/fetch-user-workout-list.action';
 import { fetchWorkoutAction } from './workout-store/queries/fetch-workout/fetch-workout.action';
-import { fetchWorkoutListAction } from './workout-list-store/queries/fetch-workout-list/fetch-workout-list.action';
+import { fetchWorkoutListAction, fetchWorkoutListSuccessAction } from './workout-list-store/queries/fetch-workout-list/fetch-workout-list.action';
 import { map } from 'rxjs/operators';
 import { selectUserWorkoutList } from './user-workout-list-store/selectors/user-workout-list.selector';
 import { selectWorkout } from './workout-store/selectors/workout.selector';
 import { selectWorkoutList } from './workout-list-store/selectors/workout-list.selector';
+import { setLoadingAction } from '../../../../shared/services/set-loading/set-loading.action';
 import { updateWorkoutAction, updateWorkoutSuccessAction } from './workout-store/commands/update-workout/update-workout.action';
 
 @Component({
@@ -51,7 +52,15 @@ export class WorkoutComponent implements OnDestroy {
               private formBuilder: FormBuilder,
               private jwtHelperService: JwtHelperService,
               private changeDetectorRef: ChangeDetectorRef) {
+    this.store.dispatch(setLoadingAction({ showLoading: true }));
     this.displayModal = false;
+
+    this.actions$.pipe(
+      ofType(fetchUserWorkoutListSuccessAction, fetchWorkoutListSuccessAction),
+      tap(() => this.changeDetectorRef.detectChanges()),
+      tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
+      takeUntil(this.destroy$)
+    ).subscribe();
 
     this.actions$.pipe(
       ofType(createWorkoutSuccessAction),

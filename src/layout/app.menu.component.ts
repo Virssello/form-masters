@@ -22,15 +22,15 @@ export class AppMenuComponent implements OnInit {
       {
         label: 'User',
         items: [
-          { label: 'Measurements', icon: 'pi pi-fw pi-eye', routerLink: ['/home/user/measurements'] },
-          { label: 'Workouts', icon: 'pi pi-fw pi-plus', routerLink: ['/home/user/workouts'] },
+          { label: 'Measurements', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/home/user/measurements'] },
+          { label: 'Workouts', icon: 'pi pi-fw pi-heart', routerLink: ['/home/user/workouts'] },
         ]
       },
       {
         label: 'Food',
         items: [
-          { label: 'Products', icon: 'pi pi-fw pi-prime', routerLink: ['/home/food/products'] },
-          { label: 'Recipes', icon: 'pi pi-fw pi-desktop', routerLink: ['/home/food/recipes'] },
+          { label: 'Products', icon: 'pi pi-fw pi-apple', routerLink: ['/home/food/products'] },
+          { label: 'Recipes', icon: 'pi pi-fw pi-book', routerLink: ['/home/food/recipes'] },
         ]
       }
     ];

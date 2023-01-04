@@ -34,7 +34,6 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
   public userMeasurements$: Observable<UserMeasurementListResponse[]> = this.store.select(selectUserMeasurementList);
   public productsUser$: Observable<ProductUserListResponse[]> = this.store.select(selectProductUserList);
   public productsUser: ProductUserListResponse[] = [];
-  public userCalories: number = parseInt(localStorage.getItem('userCalories')!);
 
   public currentlyEatenMacronutrients: Macronutrients = {
     calories: 0,
@@ -67,6 +66,21 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe();
 
+    /*    this.actions$.pipe(
+      withLatestFrom(
+        of(fetchAuthenticatedUserSuccessAction),
+        of(fetchProductUserListSuccessAction),
+        of(fetchUserMeasurementListSuccessAction)
+      ),
+      tap(([, value1, value2, value3]: [any, any, any, any]) =>{
+        if (value1 && value2 && value3) {
+          this.store.dispatch(setLoadingAction({ showLoading: false }));
+        }}),
+      takeUntil(this.destroy$)
+    ).subscribe();*/
+
+    //TODO One effect to fetch all data
+
     this.actions$.pipe(
       ofType(fetchAuthenticatedUserSuccessAction, fetchProductUserListSuccessAction, fetchUserMeasurementListSuccessAction),
       tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
@@ -83,7 +97,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       take(2),
       takeLast(1),
       map((productsUser: ProductUserListResponse[]) => {
-        productsUser.forEach((productUser: ProductUserListResponse) => {
+        productsUser.map((productUser: ProductUserListResponse) => {
           if (formatDate(productUser.createdOn, this.format, this.locale) === this.currentDate && productUser.archivedOn === null) {
             this.productsUser.push(productUser);
             this.currentlyEatenMacronutrients.calories! += (productUser.product.calories * productUser.weight);

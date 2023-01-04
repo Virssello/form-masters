@@ -2,7 +2,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RecipeResponse } from '../../response/recipe.response';
-import { catchError, debounceTime, of, switchMap } from 'rxjs';
+import { catchError, of, switchMap } from 'rxjs';
 import { fetchRecipeAction, fetchRecipeErrorAction, fetchRecipeSuccessAction } from './fetch-recipe.action';
 import { map } from 'rxjs/operators';
 
@@ -13,7 +13,6 @@ export class FetchRecipeEffect {
 
   public recipe$ = createEffect(() => this.actions$.pipe(
     ofType(fetchRecipeAction),
-    debounceTime(2000),
     switchMap(({ id }: { id: number }) => {
       return this.httpClient.get<RecipeResponse>(`api/recipes/${id}`)
         .pipe(

@@ -58,7 +58,7 @@
            class="card">
         <h5>Recent products you have eaten</h5>
         <p-table #dt
-                 [value]="productsUser | filterArchivedOn"
+                 [value]="productsUser | filterArchivedOn | filterCurrentDate"
                  [paginator]="true"
                  [rows]="15"
                  responsiveLayout="scroll">
