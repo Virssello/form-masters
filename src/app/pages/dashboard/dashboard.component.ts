@@ -3,7 +3,17 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, NgZone, OnDestroy } 
 import { AuthenticatedUserResponse } from './store/authenticated-user-store/response/authenticated-user.response';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LayoutService } from '../../../layout/service/app.layout.service';
-import { Observable, Subject, Subscription, filter, take, takeLast, takeUntil, tap } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  Subscription,
+  debounceTime,
+  filter,
+  take,
+  takeLast,
+  takeUntil,
+  tap
+} from 'rxjs';
 import { ProductUserListResponse } from './store/product-user-store/response/product-user-list.response';
 import { Store } from '@ngrx/store';
 import { UserMeasurementListResponse } from '../user/measurement/store/user-measurement-list-store/response/user-measurement-list.response';
@@ -66,26 +76,18 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe();
 
-    /*    this.actions$.pipe(
-      withLatestFrom(
-        of(fetchAuthenticatedUserSuccessAction),
-        of(fetchProductUserListSuccessAction),
-        of(fetchUserMeasurementListSuccessAction)
-      ),
-      tap(([, value1, value2, value3]: [any, any, any, any]) =>{
-        if (value1 && value2 && value3) {
-          this.store.dispatch(setLoadingAction({ showLoading: false }));
-        }}),
-      takeUntil(this.destroy$)
-    ).subscribe();*/
-
-    //TODO One effect to fetch all data
-
     this.actions$.pipe(
       ofType(fetchAuthenticatedUserSuccessAction, fetchProductUserListSuccessAction, fetchUserMeasurementListSuccessAction),
+      debounceTime(2000),
       tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
       takeUntil(this.destroy$)
     ).subscribe();
+
+    /*forkJoin([of(this.userMeasurements$), of(this.productsUser$), of(this.authenticatedUser$)]).pipe(
+      tap(() => console.log('emisja')),
+      tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
+      takeUntil(this.destroy$)
+    ).subscribe();*/
 
     this.store.dispatch(fetchAuthenticatedUserAction());
 
@@ -205,16 +207,16 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     };
   }
 
+  public ngAfterViewInit(): void {
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 1000);
+  }
+
   public ngOnDestroy(): void {
     this.destroy$.next();
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-  }
-
-  public ngAfterViewInit(): void {
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    }, 1000);
   }
 }
