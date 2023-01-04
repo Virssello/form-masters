@@ -113,6 +113,8 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     ).subscribe();
 
     this.userMeasurements$.pipe(
+      take(2),
+      takeLast(1),
       filter((userMeasurement: UserMeasurementListResponse[]) => Boolean(userMeasurement)),
       tap((userMeasurements: UserMeasurementListResponse[]) => this.ngZone.run(
         () => {
@@ -121,6 +123,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
           filteredUserMeasurement.forEach((userMeasurement: UserMeasurementListResponse) => {
             this.chartWeightData.push(userMeasurement.weight);
             this.chartCreatedAtLabels.push(formatDate(userMeasurement.createdOn, this.format, this.locale)).toString();
+            console.log(this.chartWeightData);
           });
         }
       )),

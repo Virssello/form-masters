@@ -4,6 +4,7 @@ import { Gender } from '../../../../shared/enums/gender';
 import { Goal } from '../../../../shared/enums/goal';
 import { LayoutService } from '../../../../layout/service/app.layout.service';
 import { Lifestyle } from '../../../../shared/enums/lifestyle';
+import { MessageService } from 'primeng/api';
 import { Store } from '@ngrx/store';
 import { userSignUpAction } from './store/commands/user-sign-up.action';
 
@@ -45,10 +46,12 @@ export class SignUpComponent {
 
   constructor(public layoutService: LayoutService,
               private store: Store,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private messageService: MessageService) {
   }
 
   public onUserSignUpSubmit(): void {
+    this.messageService.add({ severity: 'info', summary: 'Please wait, server is processing register request' });
     this.store.dispatch(userSignUpAction({
       user: {
         username: this.userRegisterForm.value.username!,
