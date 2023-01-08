@@ -9,7 +9,7 @@ import { addMeasurementAction, addMeasurementSuccessAction } from './store/user-
 import { archiveMeasurementAction, archiveMeasurementSuccessAction } from './store/user-measurement-list-store/commands/archive-measurement/archive-measurement.action';
 import { fetchUserMeasurementListAction, fetchUserMeasurementListSuccessAction } from './store/user-measurement-list-store/queries/fetch-user-measurement-list/fetch-user-measurement-list.action';
 import { selectUserMeasurementList } from './store/user-measurement-list-store/selectors/user-measurement-list.selector';
-import { setLoadingAction } from '../../../../shared/services/set-loading/set-loading.action';
+import { setLoadingAction } from '../../../../shared/store-services/set-loading/set-loading.action';
 import { updateMeasurementAction, updateMeasurementSuccessAction } from './store/user-measurement-list-store/commands/update-measurement/update-measurement.action';
 
 @Component({

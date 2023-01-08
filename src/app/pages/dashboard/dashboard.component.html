@@ -7,7 +7,7 @@
               {{currentlyEatenMacronutrients.calories | number:'.1-2'}} / {{user.calories! | number:'.1-2'}}
             </div>
             <div class="align-self-center">
-              <p-progressBar [value]="(currentlyEatenMacronutrients.calories / user.calories!)*100"
+              <p-progressBar [value]="(currentlyEatenMacronutrients.calories / user.calories!) * 100"
                              [showValue]="false">
               </p-progressBar>
             </div>
@@ -21,7 +21,7 @@
               {{currentlyEatenMacronutrients.protein | number:'.1-2'}} / {{(user.calories!/ 4) * 0.45 | number:'.1-2'}}
             </div>
             <div class="align-self-center">
-              <p-progressBar [value]="(currentlyEatenMacronutrients.protein / (user.calories!/ 4) * 0.45) * 100"
+              <p-progressBar [value]="(currentlyEatenMacronutrients.protein / ((user.calories!/ 4) * 0.45)) * 100"
                              [showValue]="false">
               </p-progressBar>
             </div>
@@ -34,7 +34,7 @@
               {{currentlyEatenMacronutrients.carbohydrates | number:'.1-2'}} / {{(user.calories! / 4) * 0.35 | number:'.1-2'}}
             </div>
             <div class="align-self-center">
-              <p-progressBar [value]="(currentlyEatenMacronutrients.carbohydrates / (user.calories! / 4) * 0.35) * 100"
+              <p-progressBar [value]="(currentlyEatenMacronutrients.carbohydrates / ((user.calories! / 4) * 0.35)) * 100"
                              [showValue]="false">
               </p-progressBar>
             </div>
@@ -47,7 +47,7 @@
               {{currentlyEatenMacronutrients.fat | number:'.1-2'}} / {{(user.calories! / 9) * 0.20  | number:'.1-2'}}
             </div>
             <div class="align-self-center">
-            <p-progressBar [value]="(currentlyEatenMacronutrients.fat / (user.calories! / 9) * 0.20) * 100"
+            <p-progressBar [value]="(currentlyEatenMacronutrients.fat  / ((user.calories! / 9 )* 0.20)) * 100"
                            [showValue]="false">
             </p-progressBar>
             </div>
@@ -113,9 +113,8 @@
           </ng-template>
         </p-table>
       </div>
-    <div class="col-12">
-      <div *ngIf="userMeasurements$ | async"
-           class="card">
+    <div class="col-12 card">
+      <div *ngIf="userMeasurements$ | async">
         <h5>Weight Overview</h5>
         <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
         </div>

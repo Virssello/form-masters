@@ -192,6 +192,7 @@
           <div class="flex flex-column align-items-center justify-content-between mb-5 gap-5">
             <button pButton
                     pRipple
+                    [disabled]="addMeasurementForm.invalid"
                     label="Save measurement"
                     icon="pi pi-save"
                     class="w-full p-3 text-xl"

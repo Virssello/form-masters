@@ -28,23 +28,24 @@
             </div>
           </div>
         </ng-template>
-</p-pickList>
-  <p-divider></p-divider>
+      </p-pickList>
+      <p-divider></p-divider>
       <div class="flex gap-3 justify-content-end">
-      <p-inputNumber [(ngModel)]="weight"
-                     [showButtons]="true"
-                     [min]="0.001"
-                     [step]="0.001"
-                     [minFractionDigits]="3"
-                     [maxFractionDigits]="3"
-                     suffix=" kg"
-                     mode="decimal">
-      </p-inputNumber>
-      <button pButton
-              icon="pi pi-save"
-              label="Save products"
-              (click)="saveProducts()">
-      </button>
+        <p-inputNumber [(ngModel)]="weight"
+                       [showButtons]="true"
+                       [min]="0.001"
+                       [step]="0.001"
+                       [minFractionDigits]="3"
+                       [maxFractionDigits]="3"
+                       suffix=" kg"
+                       mode="decimal">
+        </p-inputNumber>
+        <button pButton
+                [disabled]="targetProducts.length === 0"
+                icon="pi pi-save"
+                label="Save products"
+                (click)="saveProducts()">
+        </button>
       </div>
     </div>
   </div>

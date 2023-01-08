@@ -95,6 +95,7 @@
               <div class="flex flex-column align-items-center justify-content-between mb-5 gap-5">
                 <button pButton
                         pRipple
+                        [disabled]="userRegisterForm.invalid"
                         label="Sign up"
                         icon="pi pi-user-plus"
                         class="w-full p-3 text-xl"

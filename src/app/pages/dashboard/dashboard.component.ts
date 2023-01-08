@@ -26,7 +26,7 @@ import { map } from 'rxjs/operators';
 import { selectAuthenticatedUser } from './store/authenticated-user-store/selectors/authenticated-user.selector';
 import { selectProductUserList } from './store/product-user-store/selectors/product-user-list.selector';
 import { selectUserMeasurementList } from '../user/measurement/store/user-measurement-list-store/selectors/user-measurement-list.selector';
-import { setLoadingAction } from '../../../shared/services/set-loading/set-loading.action';
+import { setLoadingAction } from '../../../shared/store-services/set-loading/set-loading.action';
 
 export type Macronutrients = {
   calories: number,
@@ -123,7 +123,6 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
           filteredUserMeasurement.forEach((userMeasurement: UserMeasurementListResponse) => {
             this.chartWeightData.push(userMeasurement.weight);
             this.chartCreatedAtLabels.push(formatDate(userMeasurement.createdOn, this.format, this.locale)).toString();
-            console.log(this.chartWeightData);
           });
         }
       )),

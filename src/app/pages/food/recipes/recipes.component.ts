@@ -8,7 +8,7 @@ import { fetchRecipeAction } from './recipe-store/queries/fetch-recipe/fetch-rec
 import { fetchRecipeListAction, fetchRecipeListSuccessAction } from './recipes-list-store/queries/fetch-recipe-list/fetch-recipe-list.action';
 import { selectRecipe } from './recipe-store/selectors/recipe.selector';
 import { selectRecipeList } from './recipes-list-store/selectors/recipe-list.selector';
-import { setLoadingAction } from '../../../../shared/services/set-loading/set-loading.action';
+import { setLoadingAction } from '../../../../shared/store-services/set-loading/set-loading.action';
 
 @Component({
   selector: 'app-recipes',

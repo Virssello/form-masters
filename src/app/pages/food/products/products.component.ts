@@ -8,18 +8,16 @@ import { addProductUserAction, addProductUserSuccessAction } from './store/produ
 import { clearProductListAction } from './store/product-list-store/commands/clear-product-list/clear-product-list.action';
 import { fetchProductListAction } from './store/product-list-store/queries/fetch-product-list/fetch-product-list.action';
 import { selectProductList } from './store/product-list-store/selectors/product-list.selector';
-import { setLoadingAction } from '../../../../shared/services/set-loading/set-loading.action';
+import { setLoadingAction } from '../../../../shared/store-services/set-loading/set-loading.action';
 
 @Component({
   templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ProductsComponent implements OnDestroy {
 
   public products$: Observable<ProductListResponse[]> = this.store.select(selectProductList);
-  public initialProducts: ProductListResponse[] = [];
   public products: ProductListResponse[] = [];
   public targetProducts: ProductListResponse[] = [];
   public weight: number = 0.001;
@@ -32,18 +30,17 @@ export class ProductsComponent implements OnDestroy {
               private changeDetectorRef: ChangeDetectorRef) {
     this.store.dispatch(setLoadingAction({ showLoading: true }));
 
+    this.store.dispatch(fetchProductListAction());
+
     this.actions$.pipe(
       ofType(addProductUserSuccessAction),
       tap(() => {
         this.products = [];
-        this.initialProducts = [];
         this.targetProducts = [];
       }),
       tap(() => this.store.dispatch(fetchProductListAction())),
       takeUntil(this.destroy$)
     ).subscribe();
-
-    this.store.dispatch(fetchProductListAction());
 
     this.products$.pipe(
       filter((product: ProductListResponse[]) => Boolean(product)),

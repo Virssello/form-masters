@@ -32,10 +32,7 @@
           </div>
         </ng-template>
       </p-carousel>
-
-    </div>
-  <div class="col-12">
-    <div class="col-12">
+      </div>
       <div class="card">
         <h5>Your workouts</h5>
           <p-dataView #dv
@@ -93,7 +90,6 @@
           </p-dataView>
         </div>
       </div>
-    </div>
   </div>
 
   <p-dialog *ngIf="workout$ | async as workoutDetails"
@@ -145,6 +141,7 @@
     </form>
     <ng-template pTemplate="footer">
       <button pButton
+              [disabled]="workoutAddForm.invalid"
               label="Create workout"
               icon="pi pi-save"
               class="mr-2"
@@ -187,4 +184,3 @@
       </button>
     </ng-template>
   </p-dialog>
-</div>

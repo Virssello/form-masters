@@ -5,7 +5,7 @@ import { LayoutService } from './service/app.layout.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { Observable, Subscription, filter } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectLoading } from '../shared/services/set-loading/set-loading.selector';
+import { selectLoading } from '../shared/store-services/set-loading/set-loading.selector';
 
 @Component({
   selector: 'app-layout',

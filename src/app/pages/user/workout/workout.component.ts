@@ -16,7 +16,7 @@ import { map } from 'rxjs/operators';
 import { selectUserWorkoutList } from './user-workout-list-store/selectors/user-workout-list.selector';
 import { selectWorkout } from './workout-store/selectors/workout.selector';
 import { selectWorkoutList } from './workout-list-store/selectors/workout-list.selector';
-import { setLoadingAction } from '../../../../shared/services/set-loading/set-loading.action';
+import { setLoadingAction } from '../../../../shared/store-services/set-loading/set-loading.action';
 import { updateWorkoutAction, updateWorkoutSuccessAction } from './workout-store/commands/update-workout/update-workout.action';
 
 @Component({
