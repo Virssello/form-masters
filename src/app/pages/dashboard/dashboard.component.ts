@@ -4,7 +4,7 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   NgZone, OnChanges,
-  OnDestroy, SimpleChanges
+  OnDestroy, OnInit, SimpleChanges
 } from '@angular/core';
 import { AuthenticatedUserResponse } from './store/authenticated-user-store/response/authenticated-user.response';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -45,9 +45,9 @@ export type Macronutrients = {
   templateUrl: './dashboard.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class DashboardComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   public authenticatedUser$: Observable<AuthenticatedUserResponse> = this.store.select(selectAuthenticatedUser).pipe(
-    filter((user: AuthenticatedUserResponse) => Boolean(user),
+    filter((user: AuthenticatedUserResponse) => Boolean(user.calories),
       tap(() => this.changeDetectorRef.detectChanges()))
   );
   public userMeasurements$: Observable<UserMeasurementListResponse[]> = this.store.select(selectUserMeasurementList);
@@ -79,8 +79,6 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
               private ngZone: NgZone,
               private changeDetectorRef: ChangeDetectorRef) {
     this.store.dispatch(setLoadingAction({ showLoading: true }));
-
-    this.store.dispatch(fetchAuthenticatedUserAction());
 
     this.store.dispatch(fetchProductUserListAction({ id: this.decodedToken.id }));
 
@@ -139,6 +137,16 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
       tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
       takeUntil(this.destroy$)
     ).subscribe();
+  }
+
+  public ngOnInit(): void {
+    this.store.dispatch(fetchAuthenticatedUserAction());
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 10);
   }
 
   public deleteProductUser(product: ProductUserListResponse): void {
@@ -212,12 +220,6 @@ export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
         }
       }
     };
-  }
-
-  public ngOnChanges(changes: SimpleChanges): void {
-    setTimeout(() => {
-      window.dispatchEvent(new Event('resize'));
-    }, 10);
   }
 
   public ngAfterViewInit(): void {

@@ -15,7 +15,7 @@ export class FetchAuthenticatedUserEffect {
 
   public authenticatedUser$ = createEffect(() => this.actions$.pipe(
     ofType(fetchAuthenticatedUserAction),
-    debounceTime(1700),
+    debounceTime(2200),
     switchMap(() => {
       const decodedToken = this.jwtHelperService.decodeToken(this.jwtHelperService.tokenGetter());
 
