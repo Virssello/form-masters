@@ -60,7 +60,8 @@
         <p-table #dt
                  [value]="productsUser | filterArchivedOn | filterCurrentDate"
                  [paginator]="true"
-                 [rows]="15"
+                 [rows]="5"
+                 [sortMode]="'multiple'"
                  responsiveLayout="scroll">
           <ng-template pTemplate="caption">
 
@@ -116,7 +117,7 @@
     <div class="col-12 card">
       <div *ngIf="userMeasurements$ | async">
         <h5>Weight Overview</h5>
-        <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
+        <p-chart type="line" [data]="chartData" [options]="chartOptions" [responsive]="true"></p-chart>
         </div>
       <div>
     </div>

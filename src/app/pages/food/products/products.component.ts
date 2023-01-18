@@ -1,6 +1,7 @@
 import { Actions, ofType } from '@ngrx/effects';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { MessageService } from 'primeng/api';
 import { Observable, Subject, filter, takeUntil, tap } from 'rxjs';
 import { ProductListResponse } from './store/product-list-store/response/product-list.response';
 import { Store } from '@ngrx/store';
@@ -27,24 +28,27 @@ export class ProductsComponent implements OnDestroy {
   constructor(private store: Store,
               private actions$: Actions,
               private jwtHelperService: JwtHelperService,
-              private changeDetectorRef: ChangeDetectorRef) {
+              private changeDetectorRef: ChangeDetectorRef,
+              private messageService: MessageService) {
     this.store.dispatch(setLoadingAction({ showLoading: true }));
 
     this.store.dispatch(fetchProductListAction());
 
     this.actions$.pipe(
       ofType(addProductUserSuccessAction),
+      tap(() => this.messageService.add({ detail: 'Product has been saved' })),
       tap(() => {
         this.products = [];
         this.targetProducts = [];
       }),
       tap(() => this.store.dispatch(fetchProductListAction())),
+      tap(() => this.changeDetectorRef.detectChanges()),
       takeUntil(this.destroy$)
     ).subscribe();
 
     this.products$.pipe(
       filter((product: ProductListResponse[]) => Boolean(product)),
-      tap((products: ProductListResponse[]) => products.forEach((product: ProductListResponse) => this.products.push(product))),
+      tap((products: ProductListResponse[]) => this.products = [...this.products, ...products]),
       tap(() => this.changeDetectorRef.detectChanges()),
       tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
       takeUntil(this.destroy$)

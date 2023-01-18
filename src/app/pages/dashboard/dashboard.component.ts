@@ -1,5 +1,11 @@
 import { Actions, ofType } from '@ngrx/effects';
-import { AfterViewInit, ChangeDetectionStrategy, Component, NgZone, OnDestroy } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component,
+  NgZone, OnChanges,
+  OnDestroy, SimpleChanges
+} from '@angular/core';
 import { AuthenticatedUserResponse } from './store/authenticated-user-store/response/authenticated-user.response';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { LayoutService } from '../../../layout/service/app.layout.service';
@@ -39,8 +45,11 @@ export type Macronutrients = {
   templateUrl: './dashboard.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardComponent implements AfterViewInit, OnDestroy {
-  public authenticatedUser$: Observable<AuthenticatedUserResponse> = this.store.select(selectAuthenticatedUser);
+export class DashboardComponent implements AfterViewInit, OnChanges, OnDestroy {
+  public authenticatedUser$: Observable<AuthenticatedUserResponse> = this.store.select(selectAuthenticatedUser).pipe(
+    filter((user: AuthenticatedUserResponse) => Boolean(user),
+      tap(() => this.changeDetectorRef.detectChanges()))
+  );
   public userMeasurements$: Observable<UserMeasurementListResponse[]> = this.store.select(selectUserMeasurementList);
   public productsUser$: Observable<ProductUserListResponse[]> = this.store.select(selectProductUserList);
   public productsUser: ProductUserListResponse[] = [];
@@ -67,27 +76,9 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
               private store: Store,
               private actions$: Actions,
               private jwtHelperService: JwtHelperService,
-              private ngZone: NgZone) {
+              private ngZone: NgZone,
+              private changeDetectorRef: ChangeDetectorRef) {
     this.store.dispatch(setLoadingAction({ showLoading: true }));
-
-    this.actions$.pipe(
-      ofType(archiveProductUserSuccessAction),
-      tap(() => this.store.dispatch(fetchProductUserListAction({ id: this.decodedToken.id }))),
-      takeUntil(this.destroy$)
-    ).subscribe();
-
-    this.actions$.pipe(
-      ofType(fetchAuthenticatedUserSuccessAction, fetchProductUserListSuccessAction, fetchUserMeasurementListSuccessAction),
-      debounceTime(2000),
-      tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
-      takeUntil(this.destroy$)
-    ).subscribe();
-
-    /*forkJoin([of(this.userMeasurements$), of(this.productsUser$), of(this.authenticatedUser$)]).pipe(
-      tap(() => console.log('emisja')),
-      tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
-      takeUntil(this.destroy$)
-    ).subscribe();*/
 
     this.store.dispatch(fetchAuthenticatedUserAction());
 
@@ -102,6 +93,7 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
         productsUser.map((productUser: ProductUserListResponse) => {
           if (formatDate(productUser.createdOn, this.format, this.locale) === this.currentDate && productUser.archivedOn === null) {
             this.productsUser.push(productUser);
+            this.productsUser = [...[], ...this.productsUser];
             this.currentlyEatenMacronutrients.calories! += (productUser.product.calories * productUser.weight);
             this.currentlyEatenMacronutrients.protein += (productUser.product.protein * productUser.weight);
             this.currentlyEatenMacronutrients.carbohydrates += (productUser.product.carbohydrate * productUser.weight);
@@ -134,6 +126,19 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
     });
 
     this.initChart();
+
+    this.actions$.pipe(
+      ofType(archiveProductUserSuccessAction),
+      tap(() => this.store.dispatch(fetchProductUserListAction({ id: this.decodedToken.id }))),
+      takeUntil(this.destroy$)
+    ).subscribe();
+
+    this.actions$.pipe(
+      ofType(fetchAuthenticatedUserSuccessAction, fetchProductUserListSuccessAction, fetchUserMeasurementListSuccessAction),
+      debounceTime(2700),
+      tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   public deleteProductUser(product: ProductUserListResponse): void {
@@ -207,6 +212,12 @@ export class DashboardComponent implements AfterViewInit, OnDestroy {
         }
       }
     };
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 10);
   }
 
   public ngAfterViewInit(): void {
