@@ -133,14 +133,16 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnChanges, OnD
 
     this.actions$.pipe(
       ofType(fetchAuthenticatedUserSuccessAction, fetchProductUserListSuccessAction, fetchUserMeasurementListSuccessAction),
-      debounceTime(2700),
+      debounceTime(3000),
       tap(() => this.store.dispatch(setLoadingAction({ showLoading: false }))),
       takeUntil(this.destroy$)
     ).subscribe();
   }
 
   public ngOnInit(): void {
-    this.store.dispatch(fetchAuthenticatedUserAction());
+    setTimeout(() => {
+      this.store.dispatch(fetchAuthenticatedUserAction());
+    }, 1700);
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
